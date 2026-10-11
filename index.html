@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>¡Compara & Ahorra! 🛒 Calculadora de Ofertas de Mercado</title>
+  <!-- Meta tags PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#10b981">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Compara Precios">
+  <link rel="apple-touch-icon" href="./icon-192.svg">
+  <link rel="icon" type="image/svg+xml" href="./icon-192.svg">
+
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --primary-light: #d1fae5;
+      --accent: #f59e0b;
+      --accent-orange: #ff6b35;
+      --danger: #ef4444;
+      --dark: #1e293b;
+      --light-bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.94);
+      --border-radius: 20px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 35px -10px rgba(16, 185, 129, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 40%, #fffbeb 100%);
+      color: var(--dark);
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    /* Fondo animado de mercado con frutas y víveres sutiles */
+    .market-bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.08;
+      background-image: radial-gradient(#10b981 1.2px, transparent 1.2px), radial-gradient(#f59e0b 1.2px, transparent 1.2px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+    }
+
+    .floating-grocery {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.15;
+      animation: float 14s infinite ease-in-out alternate;
+      font-size: 2.8rem;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-30px) rotate(15deg); }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .app-header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-top: 10px;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .app-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .app-title span {
+      background: linear-gradient(135deg, #059669, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .app-subtitle {
+      font-size: 0.98rem;
+      color: #64748b;
+      max-width: 580px;
+      margin: 0 auto 16px auto;
+    }
+
+    /* Config Bar (Pestañas de Comparación: Libras vs Kilos) */
+    .control-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: var(--border-radius);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .unit-switch-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .unit-switch-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #475569;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .unit-toggle-pills {
+      display: flex;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+
+    .unit-pill-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: 9px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .unit-pill-btn.active {
+      background: white;
+      color: #059669;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .currency-and-presets {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .currency-select, .preset-btn {
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .currency-select:focus, .preset-btn:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    .preset-btn {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    /* Product Card */
+    .product-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 2px solid #e2e8f0;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .product-card:focus-within {
+      border-color: #34d399;
+      box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.2);
+    }
+
+    .product-card.is-winner {
+      border-color: #10b981;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+      box-shadow: 0 16px 36px -8px rgba(16, 185, 129, 0.35);
+      transform: translateY(-3px);
+    }
+
+    .product-card.is-loser {
+      border-color: #fecaca;
+      opacity: 0.95;
+    }
+
+    /* Winner Ribbon / Badge */
+    .winner-badge {
+      position: absolute;
+      top: -12px;
+      right: 18px;
+      background: linear-gradient(135deg, #10b981, #047857);
+      color: white;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 50px;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      animation: bounce 0.6s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .product-card.is-winner .winner-badge {
+      display: flex;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .product-tag-input {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      width: 100%;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+
+    .product-tag-input:focus {
+      border-style: solid;
+      border-color: var(--primary);
+      background: white;
+      outline: none;
+    }
+
+    .btn-remove-product {
+      background: #fee2e2;
+      border: none;
+      color: #ef4444;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-remove-product:hover {
+      background: #ef4444;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    /* Input Fields */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 0.4px;
+    }
+
+    .price-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .currency-symbol-tag {
+      position: absolute;
+      left: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #64748b;
+    }
+
+    .input-price {
+      width: 100%;
+      padding: 12px 14px 12px 34px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      background: white;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-price:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Weight / Quantity row */
+    .weight-row {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 8px;
+    }
+
+    .input-quantity {
+      padding: 12px 14px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      background: white;
+      outline: none;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .input-quantity:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    .unit-selector {
+      padding: 12px 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      background: white;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .unit-selector:focus {
+      border-color: var(--primary);
+    }
+
+    /* Multipack toggle mini */
+    .multipack-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #64748b;
+      cursor: pointer;
+      user-select: none;
+      margin-top: -4px;
+    }
+
+    .multipack-inputs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+
+    .multipack-inputs.show {
+      display: grid;
+    }
+
+    /* Card Unit Result */
+    .card-result-box {
+      margin-top: auto;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .product-card.is-winner .card-result-box {
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+
+    .result-unit-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .product-card.is-winner .result-unit-price {
+      color: #15803d;
+    }
+
+    .result-unit-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .product-card.is-winner .result-unit-label {
+      color: #166534;
+    }
+
+    .result-secondary-calc {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Add Product Card Button */
+    .btn-add-product {
+      background: white;
+      border: 2px dashed #94a3b8;
+      border-radius: var(--border-radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      color: #475569;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+      min-height: 220px;
+    }
+
+    .btn-add-product:hover {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      background: #f0fdf4;
+      transform: translateY(-2px);
+    }
+
+    .add-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: all 0.25s;
+    }
+
+    .btn-add-product:hover .add-icon-circle {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Comparison & Recommendation Banner */
+    .verdict-container {
+      background: linear-gradient(135deg, #065f46 0%, #047857 50%, #0f766e 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      display: none;
+    }
+
+    .verdict-container.show {
+      display: block;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .verdict-glow {
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      background: rgba(245, 158, 11, 0.3);
+      filter: blur(50px);
+      border-radius: 50%;
+    }
+
+    .verdict-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .verdict-icon {
+      font-size: 2.2rem;
+      color: #fbbf24;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+
+    .verdict-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .verdict-message {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #ecfdf5;
+      margin-bottom: 18px;
+    }
+
+    .verdict-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #a7f3d0;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fef08a;
+    }
+
+    /* Comparison Visual Bars */
+    .comparison-bars {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bar-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bar-fill.best {
+      background: linear-gradient(90deg, #34d399, #10b981);
+    }
+
+    .bar-fill.normal {
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+    }
+
+    /* Quick Tips / Market Tricks section */
+    .tips-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e2e8f0;
+      margin-top: 24px;
+    }
+
+    .tips-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .tip-card {
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent);
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    .tip-card strong {
+      color: #1e293b;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Actions Bottom Bar */
+    .bottom-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      border: none;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-action-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-action-secondary {
+      background: white;
+      color: #475569;
+      border: 1.5px solid #cbd5e1;
+    }
+
+    .btn-action-secondary:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Modal Presets */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .preset-item {
+      padding: 12px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-item:hover {
+      border-color: var(--primary);
+      background: #f0fdf4;
+    }
+
+    /* Botón de Instalación PWA */
+    .btn-install-pwa {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+      transition: all 0.25s ease;
+      margin-top: 8px;
+    }
+
+    .btn-install-pwa:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .app-title { font-size: 1.75rem; }
+      .control-panel { flex-direction: column; align-items: stretch; }
+      .unit-toggle-pills { justify-content: stretch; }
+      .unit-pill-btn { flex: 1; justify-content: center; }
+      .currency-and-presets { justify-content: space-between; }
+      .products-grid { grid-template-columns: 1fr; }
+      .verdict-stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Elementos flotantes de fondo (tema mercado fresco) -->
+  <div class="market-bg-pattern"></div>
+  <div class="floating-grocery" style="top: 8%; left: 4%;">🥑</div>
+  <div class="floating-grocery" style="top: 15%; right: 6%; animation-delay: -2s;">🛒</div>
+  <div class="floating-grocery" style="top: 55%; left: 3%; animation-delay: -5s;">🧀</div>
+  <div class="floating-grocery" style="top: 75%; right: 5%; animation-delay: -3s;">🥩</div>
+  <div class="floating-grocery" style="top: 35%; right: 4%; animation-delay: -7s;">🍅</div>
+  <div class="floating-grocery" style="top: 85%; left: 8%; animation-delay: -1s;">🌾</div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-badge">
+        <i class="fa-solid fa-scale-balanced"></i> Defiende Tu Bolsillo
+      </div>
+      <h1 class="app-title">Calculadora de <span>Ofertas Reales</span></h1>
+      <p class="app-subtitle">
+        ¡No caigas en las trampas del mercado! Compara el precio real por libra o kilo entre 2 o más presentaciones y descubre cuál te conviene de verdad.
+      </p>
+      <div>
+        <button id="btnInstallPWA" class="btn-install-pwa" onclick="installPWA()">
+          <i class="fa-solid fa-cloud-arrow-down"></i> Instalar como App (PWA)
+        </button>
+      </div>
+    </header>
+
+    <!-- Panel de Control y Configuración -->
+    <div class="control-panel">
+      <div class="unit-switch-group">
+        <label class="unit-switch-label">
+          <i class="fa-solid fa-arrow-right-arrow-left"></i> Unidad Base de Comparación:
+        </label>
+        <div class="unit-toggle-pills">
+          <button class="unit-pill-btn active" id="btnBaseLbs" onclick="setBaseUnit('lb')">
+            <i class="fa-solid fa-weight-hanging"></i> Libras (lb)
+          </button>
+          <button class="unit-pill-btn" id="btnBaseKgs" onclick="setBaseUnit('kg')">
+            <i class="fa-solid fa-cubes-stacked"></i> Kilos (kg)
+          </button>
+        </div>
+      </div>
+
+      <div class="currency-and-presets">
+        <div>
+          <label class="unit-switch-label" style="margin-bottom: 4px;">
+            <i class="fa-solid fa-coins"></i> Moneda:
+          </label>
+          <select class="currency-select" id="currencySelect" onchange="updateCurrency()">
+            <option value="$">$ Dólar / Peso</option>
+            <option value="S/">S/ Soles</option>
+            <option value="Q">Q Quetzales</option>
+            <option value="L">L Lempiras</option>
+            <option value="C$">C$ Córdobas</option>
+            <option value="₡">₡ Colones</option>
+            <option value="€">€ Euros</option>
+            <option value="Bs">Bs Bolivianos</option>
+          </select>
+        </div>
+
+        <button class="preset-btn" onclick="openPresetsModal()" style="margin-top: 18px;">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Ver Ejemplos Típicos
+        </button>
+      </div>
+    </div>
+
+    <!-- Veredicto / Recomendación Inteligente Destacada -->
+    <div class="verdict-container" id="verdictContainer">
+      <div class="verdict-glow"></div>
+      <div class="verdict-header">
+        <i class="fa-solid fa-trophy verdict-icon"></i>
+        <div>
+          <div style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: #a7f3d0;">
+            Recomendación Definitiva
+          </div>
+          <h2 class="verdict-title" id="verdictWinnerName">¡Opción A es la Gran Ganadora!</h2>
+        </div>
+      </div>
+      <p class="verdict-message" id="verdictMessage">
+        Esta opción te ofrece el precio más económico por libra.
+      </p>
+
+      <div class="verdict-stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Precio más bajo</span>
+          <span class="stat-value" id="verdictWinnerPrice">$0.00 / lb</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ahorro vs Opción más cara</span>
+          <span class="stat-value" id="verdictSavingsPercent">0% Ahorro</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ahorro en dinero aprox.</span>
+          <span class="stat-value" id="verdictSavingsMoney">$0.00 de diferencia</span>
+        </div>
+      </div>
+
+      <!-- Barras visuales comparativas -->
+      <div class="comparison-bars" id="comparisonBars">
+        <!-- Renderizado dinámico de barras -->
+      </div>
+    </div>
+
+    <!-- Tarjetas de Productos -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Los productos se generan dinámicamente con JS -->
+    </div>
+
+    <!-- Consejos del Mercado -->
+    <section class="tips-section">
+      <h3 class="tips-title">
+        <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Tips de oro para amas de casa y compradores inteligentes
+      </h3>
+      <div class="tips-list">
+        <div class="tip-card">
+          <strong>⚠️ El truco del tamaño "Ahorro":</strong>
+          A menudo las presentaciones gigantes o "Familiares" parecen más baratas por empaque, pero al calcular por libra o kilo resultan más caras que dos paquetes medianos.
+        </div>
+        <div class="tip-card">
+          <strong>⚖️ Equivalencia clave:</strong>
+          1 Kilo equivale exactamente a <strong>2.2046 Libras</strong> (o aprox. 2.2 libras). 1 Libra tiene <strong>453.6 gramos</strong> o 16 onzas.
+        </div>
+        <div class="tip-card">
+          <strong>🏷️ Ofertas 2x1 y 3x2:</strong>
+          Suma el peso total de los paquetes incluidos en la promo y pon el precio final total para ver si de verdad conviene.
+        </div>
+      </div>
+    </section>
+
+    <!-- Botones de Acción Inferiores -->
+    <div class="bottom-actions">
+      <button class="btn-action btn-action-primary" onclick="calculateWinner(true)">
+        <i class="fa-solid fa-calculator"></i> Calcular y Revelar Ganador
+      </button>
+      <button class="btn-action btn-action-secondary" onclick="shareComparison()">
+        <i class="fa-solid fa-share-nodes"></i> Compartir / Copiar Resumen
+      </button>
+      <button class="btn-action btn-action-secondary" onclick="resetCalculator()">
+        <i class="fa-solid fa-rotate-left"></i> Limpiar Todo
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de Ejemplos Típicos -->
+  <div class="modal-overlay" id="presetsModal" onclick="closePresetsModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #0f172a;">
+          <i class="fa-solid fa-basket-shopping" style="color: #10b981;"></i> Ejemplos del Mercado
+        </h3>
+        <button onclick="closePresetsModal()" style="border: none; background: transparent; font-size: 1.2rem; cursor: pointer; color: #64748b;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 16px;">
+        Haz clic en cualquiera de estos casos reales para cargar los datos automáticamente:
+      </p>
+
+      <div class="preset-item" onclick="loadPreset('arroz')">
+        <strong style="display: block; color: #0f172a;">🌾 Caso Arroz: ¿Bolsa de 5 lbs vs 1 Kilo vs Paquete 450g?</strong>
+        <span style="font-size: 0.8rem; color: #64748b;">Comparación típica de granos básicos en el mercado.</span>
+      </div>
+
+      <div class="preset-item" onclick="loadPreset('detergente')">
+        <strong style="display: block; color: #0f172a;">🧼 Caso Detergente: Bolsa 850g ($2.10) vs Bolsa 2.5kg ($6.50)</strong>
+        <span style="font-size: 0.8rem; color: #64748b;">¿Realmente la bolsa gigante ahorra dinero?</span>
+      </div>
+
+      <div class="preset-item" onclick="loadPreset('aceite')">
+        <strong style="display: block; color: #0f172a;">🛢️ Caso Aceite / Líquidos: Botella 900ml ($2.25) vs Galón 3.8L ($8.90)</strong>
+        <span style="font-size: 0.8rem; color: #64748b;">Comparación de volúmenes en litros y mililitros.</span>
+      </div>
+
+      <div class="preset-item" onclick="loadPreset('tres_productos')">
+        <strong style="display: block; color: #0f172a;">🥩 Caso 3 Opciones: Pollo por Libra vs Kilo vs Paquete Promo</strong>
+        <span style="font-size: 0.8rem; color: #64748b;">Comparación rápida de tres opciones simultáneas.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastMessage">
+    <i class="fa-solid fa-circle-check" style="color: #34d399;"></i>
+    <span id="toastText">Copiado al portapapeles</span>
+  </div>
+
+  <script>
+    // Constantes de Conversión a Libras (Base interna de cálculo)
+    // 1 lb = 1 lb
+    // 1 kg = 2.20462262 lb
+    // 1 g  = 0.00220462262 lb (1 lb = 453.59237 g)
+    // 1 oz = 0.0625 lb (16 oz = 1 lb)
+    // 1 L  = 2.20462 lb (aprox masa de agua/líquidos generales)
+    // 1 ml = 0.00220462 lb
+    // 1 un = 1 unidad
+    const CONVERSIONS_TO_LB = {
+      lb: 1,
+      kg: 2.20462262185,
+      g: 0.00220462262185,
+      oz: 0.0625,
+      l: 2.20462262185,
+      ml: 0.00220462262185,
+      un: 1
+    };
+
+    const CONVERSIONS_TO_KG = {
+      kg: 1,
+      lb: 0.45359237,
+      g: 0.001,
+      oz: 0.0283495,
+      l: 1,
+      ml: 0.001,
+      un: 1
+    };
+
+    // Estado de la Aplicación
+    let appState = {
+      baseUnit: 'lb', // 'lb' o 'kg'
+      currency: '$',
+      products: [
+        { id: 1, name: 'Opción 1 (ej. Bolsa Pequeña)', price: 1.50, quantity: 450, unit: 'g', multiUnits: 1 },
+        { id: 2, name: 'Opción 2 (ej. Bolsa Mediana)', price: 3.20, quantity: 2, unit: 'lb', multiUnits: 1 },
+        { id: 3, name: 'Opción 3 (ej. Bolsa Familiar)', price: 6.90, quantity: 2.5, unit: 'kg', multiUnits: 1 }
+      ]
+    };
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      calculateWinner(false);
+    });
+
+    // Cambiar Unidad Base (Libras o Kilos)
+    function setBaseUnit(unit) {
+      appState.baseUnit = unit;
+      document.getElementById('btnBaseLbs').classList.toggle('active', unit === 'lb');
+      document.getElementById('btnBaseKgs').classList.toggle('active', unit === 'kg');
+      renderProducts();
+      calculateWinner(false);
+      showToast(`Comparando precios en ${unit === 'lb' ? 'Libras (lb)' : 'Kilos (kg)'}`);
+    }
+
+    // Cambiar Símbolo de Moneda
+    function updateCurrency() {
+      appState.currency = document.getElementById('currencySelect').value;
+      renderProducts();
+      calculateWinner(false);
+    }
+
+    // Renderizar Productos en la Cuadrícula
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      appState.products.forEach((prod, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.id = `product-card-${prod.id}`;
+
+        const letter = String.fromCharCode(65 + index); // A, B, C...
+
+        card.innerHTML = `
+          <div class="winner-badge">
+            <i class="fa-solid fa-crown"></i> ¡Mejor Precio!
+          </div>
+
+          <div class="card-header">
+            <input type="text" class="product-tag-input" value="${prod.name}" 
+                   placeholder="Nombre o descripción" 
+                   oninput="updateProductName(${prod.id}, this.value)" />
+            ${appState.products.length > 2 ? `
+              <button class="btn-remove-product" title="Eliminar opción" onclick="removeProduct(${prod.id})">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            ` : ''}
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              <i class="fa-solid fa-tag"></i> Precio Total a Pagar
+            </label>
+            <div class="price-input-wrapper">
+              <span class="currency-symbol-tag">${appState.currency}</span>
+              <input type="number" step="0.01" min="0" class="input-price" 
+                     value="${prod.price !== '' ? prod.price : ''}" 
+                     placeholder="0.00" 
+                     oninput="updateProductField(${prod.id}, 'price', this.value)" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              <i class="fa-solid fa-weight-scale"></i> Peso o Cantidad por Empaque
+            </label>
+            <div class="weight-row">
+              <input type="number" step="0.01" min="0" class="input-quantity" 
+                     value="${prod.quantity !== '' ? prod.quantity : ''}" 
+                     placeholder="Ej: 500" 
+                     oninput="updateProductField(${prod.id}, 'quantity', this.value)" />
+              <select class="unit-selector" onchange="updateProductField(${prod.id}, 'unit', this.value)">
+                <option value="lb" ${prod.unit === 'lb' ? 'selected' : ''}>Libras (lb)</option>
+                <option value="kg" ${prod.unit === 'kg' ? 'selected' : ''}>Kilos (kg)</option>
+                <option value="g" ${prod.unit === 'g' ? 'selected' : ''}>Gramos (g)</option>
+                <option value="oz" ${prod.unit === 'oz' ? 'selected' : ''}>Onzas (oz)</option>
+                <option value="l" ${prod.unit === 'l' ? 'selected' : ''}>Litros (L)</option>
+                <option value="ml" ${prod.unit === 'ml' ? 'selected' : ''}>Mililitros (ml)</option>
+                <option value="un" ${prod.unit === 'un' ? 'selected' : ''}>Unidades (piezas)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card-result-box" id="calc-box-${prod.id}">
+            <div class="result-unit-label">Costo por ${appState.baseUnit === 'lb' ? 'Libra' : 'Kilo'}</div>
+            <div class="result-unit-price" id="unit-price-display-${prod.id}">- - -</div>
+            <div class="result-secondary-calc" id="secondary-price-display-${prod.id}"></div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Botón para agregar más productos
+      const addCard = document.createElement('div');
+      addCard.className = 'btn-add-product';
+      addCard.onclick = addProduct;
+      addCard.innerHTML = `
+        <div class="add-icon-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <span>Agregar otra opción</span>
+      `;
+      grid.appendChild(addCard);
+    }
+
+    // Actualizar datos del producto
+    function updateProductName(id, val) {
+      const prod = appState.products.find(p => p.id === id);
+      if (prod) prod.name = val;
+    }
+
+    function updateProductField(id, field, val) {
+      const prod = appState.products.find(p => p.id === id);
+      if (prod) {
+        prod[field] = (field === 'price' || field === 'quantity') ? (val === '' ? '' : parseFloat(val)) : val;
+        calculateWinner(false);
+      }
+    }
+
+    // Agregar nuevo producto
+    function addProduct() {
+      const newId = Date.now();
+      const count = appState.products.length + 1;
+      appState.products.push({
+        id: newId,
+        name: `Opción ${count}`,
+        price: '',
+        quantity: '',
+        unit: appState.baseUnit,
+        multiUnits: 1
+      });
+      renderProducts();
+      calculateWinner(false);
+      showToast('Nueva opción agregada');
+    }
+
+    // Eliminar producto
+    function removeProduct(id) {
+      if (appState.products.length <= 2) {
+        showToast('Debes mantener al menos 2 opciones para comparar');
+        return;
+      }
+      appState.products = appState.products.filter(p => p.id !== id);
+      renderProducts();
+      calculateWinner(false);
+    }
+
+    // Cálculo central
+    function calculateWinner(triggerCelebration = false) {
+      const validProducts = [];
+
+      appState.products.forEach(prod => {
+        const card = document.getElementById(`product-card-${prod.id}`);
+        const displayEl = document.getElementById(`unit-price-display-${prod.id}`);
+        const secondaryEl = document.getElementById(`secondary-price-display-${prod.id}`);
+
+        if (card) {
+          card.classList.remove('is-winner', 'is-loser');
+        }
+
+        const price = parseFloat(prod.price);
+        const qty = parseFloat(prod.quantity);
+
+        if (!isNaN(price) && price > 0 && !isNaN(qty) && qty > 0) {
+          // Convertir a base LB y KG
+          let totalWeightInLb = qty * (CONVERSIONS_TO_LB[prod.unit] || 1);
+          let totalWeightInKg = qty * (CONVERSIONS_TO_KG[prod.unit] || 1);
+
+          let pricePerLb = price / totalWeightInLb;
+          let pricePerKg = price / totalWeightInKg;
+
+          let targetUnitPrice = appState.baseUnit === 'lb' ? pricePerLb : pricePerKg;
+          let secondaryUnitPrice = appState.baseUnit === 'lb' ? pricePerKg : pricePerLb;
+          let secondaryUnitName = appState.baseUnit === 'lb' ? 'kg' : 'lb';
+
+          if (displayEl) {
+            displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
+          }
+          if (secondaryEl) {
+            secondaryEl.textContent = `(${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+          }
+
+          validProducts.push({
+            ...prod,
+            price,
+            qty,
+            targetUnitPrice,
+            pricePerLb,
+            pricePerKg,
+            elementCard: card
+          });
+        } else {
+          if (displayEl) displayEl.textContent = '- - -';
+          if (secondaryEl) secondaryEl.textContent = 'Ingresa precio y peso';
+        }
+      });
+
+      const verdictContainer = document.getElementById('verdictContainer');
+
+      if (validProducts.length >= 2) {
+        // Ordenar de menor a mayor precio unitario
+        validProducts.sort((a, b) => a.targetUnitPrice - b.targetUnitPrice);
+
+        const winner = validProducts[0];
+        const loser = validProducts[validProducts.length - 1];
+
+        // Marcar tarjetas
+        validProducts.forEach((p, idx) => {
+          if (idx === 0) {
+            p.elementCard?.classList.add('is-winner');
+          } else {
+            p.elementCard?.classList.add('is-loser');
+          }
+        });
+
+        // Calcular porcentaje de ahorro
+        const diffUnit = loser.targetUnitPrice - winner.targetUnitPrice;
+        const savingsPercent = ((diffUnit / loser.targetUnitPrice) * 100).toFixed(1);
+
+        // Mostrar Recomendación
+        verdictContainer.classList.add('show');
+        document.getElementById('verdictWinnerName').textContent = `🏆 ¡${winner.name} es la Mejor Opción!`;
+        
+        let unitText = appState.baseUnit === 'lb' ? 'libra' : 'kilo';
+        document.getElementById('verdictWinnerPrice').textContent = `${appState.currency}${winner.targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
+        document.getElementById('verdictSavingsPercent').textContent = `${savingsPercent}% Más Barato`;
+        document.getElementById('verdictSavingsMoney').textContent = `${appState.currency}${diffUnit.toFixed(3)} menos por ${unitText}`;
+
+        document.getElementById('verdictMessage').innerHTML = `
+          Comprando <strong>${winner.name}</strong> estás pagando <strong>${appState.currency}${winner.targetUnitPrice.toFixed(3)}</strong> por cada ${unitText}.
+          Es un <strong>${savingsPercent}% más económico</strong> que <strong>${loser.name}</strong> (${appState.currency}${loser.targetUnitPrice.toFixed(3)}/${appState.baseUnit}).
+        `;
+
+        // Renderizar barras comparativas
+        renderComparisonBars(validProducts);
+
+        if (triggerCelebration && typeof confetti === 'function') {
+          confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      } else {
+        verdictContainer.classList.remove('show');
+      }
+    }
+
+    // Render de barras
+    function renderComparisonBars(sortedProducts) {
+      const container = document.getElementById('comparisonBars');
+      container.innerHTML = '<div style="font-size:0.8rem; font-weight:700; color:#a7f3d0; margin-top:10px;">COMPARATIVA VISUAL DE PRECIO UNITARIO:</div>';
+
+      const maxPrice = sortedProducts[sortedProducts.length - 1].targetUnitPrice;
+
+      sortedProducts.forEach((p, idx) => {
+        const percentWidth = Math.max(25, (p.targetUnitPrice / maxPrice) * 100);
+        const isBest = idx === 0;
+
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML = `
+          <div class="bar-info">
+            <span>${isBest ? '👑 ' : ''}${p.name}</span>
+            <span>${appState.currency}${p.targetUnitPrice.toFixed(3)} / ${appState.baseUnit}</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill ${isBest ? 'best' : 'normal'}" style="width: ${percentWidth}%;"></div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // Cargar Preajustes Comunes
+    function loadPreset(type) {
+      closePresetsModal();
+
+      if (type === 'arroz') {
+        appState.baseUnit = 'lb';
+        document.getElementById('btnBaseLbs').classList.add('active');
+        document.getElementById('btnBaseKgs').classList.remove('active');
+        appState.products = [
+          { id: 1, name: 'Bolsa Chica (450g)', price: 0.85, quantity: 450, unit: 'g', multiUnits: 1 },
+          { id: 2, name: 'Bolsa Mediana (1 Kilo)', price: 1.70, quantity: 1, unit: 'kg', multiUnits: 1 },
+          { id: 3, name: 'Bolsa 5 Libras (Oferta)', price: 3.40, quantity: 5, unit: 'lb', multiUnits: 1 }
+        ];
+      } else if (type === 'detergente') {
+        appState.baseUnit = 'kg';
+        document.getElementById('btnBaseLbs').classList.remove('active');
+        document.getElementById('btnBaseKgs').classList.add('active');
+        appState.products = [
+          { id: 1, name: 'Bolsa Mediana (850g)', price: 2.10, quantity: 850, unit: 'g', multiUnits: 1 },
+          { id: 2, name: 'Bolsa Gigante (2.5 Kilos)', price: 6.50, quantity: 2.5, unit: 'kg', multiUnits: 1 }
+        ];
+      } else if (type === 'aceite') {
+        appState.baseUnit = 'lb';
+        appState.products = [
+          { id: 1, name: 'Botella 900 ml', price: 2.25, quantity: 900, unit: 'ml', multiUnits: 1 },
+          { id: 2, name: 'Galón 3.8 Litros', price: 8.90, quantity: 3.8, unit: 'l', multiUnits: 1 }
+        ];
+      } else if (type === 'tres_productos') {
+        appState.baseUnit = 'lb';
+        appState.products = [
+          { id: 1, name: 'Pollo Libra Suelta', price: 1.65, quantity: 1, unit: 'lb', multiUnits: 1 },
+          { id: 2, name: 'Bandeja Especial 1.2 kg', price: 4.10, quantity: 1.2, unit: 'kg', multiUnits: 1 },
+          { id: 3, name: 'Combo 3 Libras', price: 4.65, quantity: 3, unit: 'lb', multiUnits: 1 }
+        ];
+      }
+
+      renderProducts();
+      calculateWinner(true);
+      showToast('Ejemplo cargado exitosamente');
+    }
+
+    // Modal helpers
+    function openPresetsModal() {
+      document.getElementById('presetsModal').classList.add('open');
+    }
+
+    function closePresetsModal(e) {
+      document.getElementById('presetsModal').classList.remove('open');
+    }
+
+    // Limpiar Calculadora
+    function resetCalculator() {
+      appState.products.forEach(p => {
+        p.price = '';
+        p.quantity = '';
+      });
+      renderProducts();
+      calculateWinner(false);
+      showToast('Formulario limpiado');
+    }
+
+    // Compartir / Copiar Resumen
+    function shareComparison() {
+      const validProds = appState.products.filter(p => p.price > 0 && p.quantity > 0);
+      if (validProds.length < 2) {
+        showToast('Completa al menos 2 opciones para compartir');
+        return;
+      }
+
+      validProds.sort((a, b) => {
+        let aPrice = a.price / (a.quantity * (CONVERSIONS_TO_LB[a.unit] || 1));
+        let bPrice = b.price / (b.quantity * (CONVERSIONS_TO_LB[b.unit] || 1));
+        return aPrice - bPrice;
+      });
+
+      const winner = validProds[0];
+      let text = `🛒 *Comparador de Precios de Mercado*\n\n`;
+      text += `🏆 *La mejor opción es:* ${winner.name}\n`;
+      text += `💰 *Precio unitario:* ${appState.currency}${(winner.price / (winner.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[winner.unit] : CONVERSIONS_TO_KG[winner.unit]))).toFixed(3)} por ${appState.baseUnit}\n\n`;
+      text += `📋 *Detalle de opciones comparadas:*\n`;
+      
+      validProds.forEach((p, idx) => {
+        let unitP = (p.price / (p.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[p.unit] : CONVERSIONS_TO_KG[p.unit]))).toFixed(3);
+        text += `${idx === 0 ? '🥇' : '▫️'} ${p.name}: ${appState.currency}${p.price} (${p.quantity} ${p.unit}) -> *${appState.currency}${unitP}/${appState.baseUnit}*\n`;
+      });
+
+      text += `\n✨ Calculado con la Calculadora de Ofertas Reales`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('¡Resumen copiado para enviar por WhatsApp!');
+      }).catch(() => {
+        showToast('No se pudo copiar automáticamente');
+      });
+    }
+
+    // Toast helper
+    function showToast(msg) {
+      const toast = document.getElementById('toastMessage');
+      document.getElementById('toastText').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // ==========================================
+    // PWA & Service Worker Logic
+    // ==========================================
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('ServiceWorker PWA activo:', reg.scope))
+          .catch(err => console.log('Info SW (requiere http/https):', err));
+      });
+    }
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevenir el banner por defecto del navegador para usar nuestro botón
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById('btnInstallPWA');
+      if (installBtn) {
+        installBtn.style.display = 'inline-flex';
+        installBtn.classList.add('pulse');
+      }
+    });
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            showToast('🎉 ¡App instalada con éxito en tu dispositivo!');
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        // Instrucciones si el navegador no soporta beforeinstallprompt (ej. Safari en iPhone)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+          alert('📲 Para instalar en iPhone / iPad:\n1. Toca el botón Compartir (el ícono con una flecha hacia arriba).\n2. Elige "Agregar al inicio" (o "Añadir a pantalla de inicio").\n¡Y listo!');
+        } else {
+          showToast('Para instalar: usa el menú de tu navegador (⋮) > "Instalar aplicación" o "Agregar a la pantalla principal"');
+        }
+      }
+    }
+
+    window.addEventListener('appinstalled', () => {
+      showToast('🎉 ¡Gracias por instalar la Calculadora de Mercado!');
+      const installBtn = document.getElementById('btnInstallPWA');
+      if (installBtn) installBtn.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
