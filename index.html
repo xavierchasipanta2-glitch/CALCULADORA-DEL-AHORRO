@@ -910,7 +910,62 @@
       </div>
     </header>
 
-    <!-- Panel de Control y Configuración -->
+    <!-- 1. Tarjetas de Productos (Aparecen de primero para ingresar datos rápido) -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Los productos se generan dinámicamente con JS -->
+    </div>
+
+    <!-- Botones de Acción Inmediata -->
+    <div class="bottom-actions" style="margin-top: 0px; margin-bottom: 24px;">
+      <button class="btn-action btn-action-primary" onclick="calculateWinner(true)">
+        <i class="fa-solid fa-calculator"></i> Comparar y Ver Mejor Precio
+      </button>
+      <button class="btn-action btn-action-secondary" onclick="shareComparison()">
+        <i class="fa-solid fa-share-nodes"></i> Compartir
+      </button>
+      <button class="btn-action btn-action-secondary" onclick="resetCalculator()">
+        <i class="fa-solid fa-rotate-left"></i> Limpiar
+      </button>
+    </div>
+
+    <!-- 2. Penúltimo: Veredicto / Recomendación Inteligente Destacada -->
+    <div class="verdict-container" id="verdictContainer">
+      <div class="verdict-glow"></div>
+      <div class="verdict-header">
+        <i class="fa-solid fa-trophy verdict-icon"></i>
+        <div>
+          <div style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: #a7f3d0;">
+            Recomendación Definitiva
+          </div>
+          <h2 class="verdict-title" id="verdictWinnerName">¡Opción Ganadora!</h2>
+        </div>
+      </div>
+      <p class="verdict-message" id="verdictMessage">
+        Esta opción te ofrece el precio más económico por libra.
+      </p>
+
+      <div class="verdict-stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Precio más bajo</span>
+          <span class="stat-value" id="verdictWinnerPrice">$0.00 / lb</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ahorro vs Opción más cara</span>
+          <span class="stat-value" id="verdictSavingsPercent">0% Ahorro</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Diferencia de costo</span>
+          <span class="stat-value" id="verdictSavingsMoney">$0.00 de diferencia</span>
+        </div>
+      </div>
+
+      <!-- Barras visuales comparativas -->
+      <div class="comparison-bars" id="comparisonBars">
+        <!-- Renderizado dinámico de barras -->
+      </div>
+    </div>
+
+    <!-- 3. Al final: Configuración de Unidad Base (Libras / Kilos), Moneda y Ejemplos -->
     <div class="control-panel">
       <div class="unit-switch-group">
         <label class="unit-switch-label">
@@ -947,48 +1002,6 @@
           <i class="fa-solid fa-wand-magic-sparkles"></i> Ver Ejemplos Típicos
         </button>
       </div>
-    </div>
-
-    <!-- Veredicto / Recomendación Inteligente Destacada -->
-    <div class="verdict-container" id="verdictContainer">
-      <div class="verdict-glow"></div>
-      <div class="verdict-header">
-        <i class="fa-solid fa-trophy verdict-icon"></i>
-        <div>
-          <div style="font-size: 0.85rem; text-transform: uppercase; font-weight: 700; color: #a7f3d0;">
-            Recomendación Definitiva
-          </div>
-          <h2 class="verdict-title" id="verdictWinnerName">¡Opción A es la Gran Ganadora!</h2>
-        </div>
-      </div>
-      <p class="verdict-message" id="verdictMessage">
-        Esta opción te ofrece el precio más económico por libra.
-      </p>
-
-      <div class="verdict-stats-grid">
-        <div class="stat-item">
-          <span class="stat-label">Precio más bajo</span>
-          <span class="stat-value" id="verdictWinnerPrice">$0.00 / lb</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Ahorro vs Opción más cara</span>
-          <span class="stat-value" id="verdictSavingsPercent">0% Ahorro</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Ahorro en dinero aprox.</span>
-          <span class="stat-value" id="verdictSavingsMoney">$0.00 de diferencia</span>
-        </div>
-      </div>
-
-      <!-- Barras visuales comparativas -->
-      <div class="comparison-bars" id="comparisonBars">
-        <!-- Renderizado dinámico de barras -->
-      </div>
-    </div>
-
-    <!-- Tarjetas de Productos -->
-    <div class="products-grid" id="productsGrid">
-      <!-- Los productos se generan dinámicamente con JS -->
     </div>
 
     <!-- Consejos del Mercado -->
@@ -1103,9 +1116,8 @@
       baseUnit: 'lb', // 'lb' o 'kg'
       currency: '$',
       products: [
-        { id: 1, name: 'Opción 1 (ej. Bolsa Pequeña)', price: 1.50, quantity: 450, unit: 'g', multiUnits: 1 },
-        { id: 2, name: 'Opción 2 (ej. Bolsa Mediana)', price: 3.20, quantity: 2, unit: 'lb', multiUnits: 1 },
-        { id: 3, name: 'Opción 3 (ej. Bolsa Familiar)', price: 6.90, quantity: 2.5, unit: 'kg', multiUnits: 1 }
+        { id: 1, name: 'Café Buen Día (Presentación 1)', price: '', quantity: '', unit: 'g', multiUnits: 1 },
+        { id: 2, name: 'Café Buen Día (Presentación 2)', price: '', quantity: '', unit: 'lb', multiUnits: 1 }
       ]
     };
 
@@ -1150,9 +1162,14 @@
           </div>
 
           <div class="card-header">
-            <input type="text" class="product-tag-input" value="${prod.name}" 
-                   placeholder="Nombre o descripción" 
-                   oninput="updateProductName(${prod.id}, this.value)" />
+            <div style="width: 100%;">
+              <label class="field-label" style="display: block; margin-bottom: 4px;">
+                <i class="fa-solid fa-pen-to-square"></i> Nombre del producto
+              </label>
+              <input type="text" class="product-tag-input" value="${prod.name}" 
+                     placeholder="Nombre del producto (ej. Café Buen Día)" 
+                     oninput="updateProductName(${prod.id}, this.value)" />
+            </div>
             ${appState.products.length > 2 ? `
               <button class="btn-remove-product" title="Eliminar opción" onclick="removeProduct(${prod.id})">
                 <i class="fa-solid fa-trash-can"></i>
@@ -1162,7 +1179,7 @@
 
           <div class="field-group">
             <label class="field-label">
-              <i class="fa-solid fa-tag"></i> Precio Total a Pagar
+              <i class="fa-solid fa-tag"></i> Precio marcado en la percha
             </label>
             <div class="price-input-wrapper">
               <span class="currency-symbol-tag">${appState.currency}</span>
@@ -1175,7 +1192,7 @@
 
           <div class="field-group">
             <label class="field-label">
-              <i class="fa-solid fa-weight-scale"></i> Peso o Cantidad por Empaque
+              <i class="fa-solid fa-weight-scale"></i> Peso o cantidad del empaque
             </label>
             <div class="weight-row">
               <input type="number" step="0.01" min="0" class="input-quantity" 
@@ -1197,7 +1214,7 @@
           <div class="card-result-box" id="calc-box-${prod.id}">
             <div class="result-unit-label">Costo por ${appState.baseUnit === 'lb' ? 'Libra' : 'Kilo'}</div>
             <div class="result-unit-price" id="unit-price-display-${prod.id}">- - -</div>
-            <div class="result-secondary-calc" id="secondary-price-display-${prod.id}"></div>
+            <div class="result-secondary-calc" id="secondary-price-display-${prod.id}">Ingresa precio y peso</div>
           </div>
         `;
 
@@ -1237,7 +1254,7 @@
       const count = appState.products.length + 1;
       appState.products.push({
         id: newId,
-        name: `Opción ${count}`,
+        name: `Presentación ${count}`,
         price: '',
         quantity: '',
         unit: appState.baseUnit,
