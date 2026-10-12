@@ -1,5 +1,5 @@
 // Service Worker para 'Compara & Ahorra - Calculadora de Mercado'
-const CACHE_NAME = 'compara-mercado-v5';
+const CACHE_NAME = 'compara-mercado-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

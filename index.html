@@ -1092,16 +1092,54 @@
       transform: scale(1.08);
     }
 
-    .btn-gallery {
-      background: #ecfdf5;
-      color: #059669;
-      border: 1px solid #a7f3d0;
+    .photo-choice-sheet {
+      background: white;
+      border-radius: 24px 24px 20px 20px;
+      max-width: 360px;
+      width: 100%;
+      padding: 22px 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      animation: popUpChoice 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
     }
 
-    .btn-gallery:hover {
-      background: #059669;
-      color: white;
-      transform: scale(1.08);
+    @keyframes popUpChoice {
+      from { transform: scale(0.9) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .photo-choice-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .photo-choice-btn:hover, .photo-choice-btn:active {
+      background: #f0fdf4;
+      border-color: #10b981;
+      transform: translateY(-2px);
+    }
+
+    .photo-choice-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
     }
 
     .btn-eraser {
@@ -1653,7 +1691,7 @@
 
     <!-- Footer con Versión y Autor -->
     <footer class="app-footer">
-      <div class="footer-badge">v1.1.7</div>
+      <div class="footer-badge">v1.1.8</div>
       <p class="footer-author">Creado by <strong>Xavier Chasipanta</strong></p>
       <p class="footer-subtitle">Defiende Tu Bolsillo • Calculadora de Ofertas de Mercado</p>
     </footer>
@@ -1755,6 +1793,49 @@
           <i class="fa-solid fa-cloud"></i> Firebase / Nube
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal / Menú Selector de Foto: Tomar Foto o Elegir de Galería -->
+  <div class="modal-overlay" id="photoChoiceModal" onclick="closePhotoModal(event)">
+    <div class="photo-choice-sheet" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-camera" style="color: #0284c7;"></i> Foto del Producto
+        </h4>
+        <button onclick="closePhotoModal()" style="border: none; background: transparent; font-size: 1.1rem; cursor: pointer; color: #64748b;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 14px; text-align: left;">
+        ¿Cómo deseas agregar la foto del producto?
+      </p>
+
+      <button type="button" class="photo-choice-btn" onclick="chooseCameraOption()">
+        <div class="photo-choice-icon-circle" style="background: #e0f2fe; color: #0284c7;">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <div style="text-align: left; flex: 1;">
+          <div style="font-size: 0.95rem; font-weight: 800; color: #0f172a;">Tomar Foto con Cámara</div>
+          <div style="font-size: 0.76rem; color: #64748b; font-weight: 500;">Captura la percha en vivo</div>
+        </div>
+        <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 0.85rem;"></i>
+      </button>
+
+      <button type="button" class="photo-choice-btn" onclick="chooseGalleryOption()">
+        <div class="photo-choice-icon-circle" style="background: #ecfdf5; color: #059669;">
+          <i class="fa-solid fa-images"></i>
+        </div>
+        <div style="text-align: left; flex: 1;">
+          <div style="font-size: 0.95rem; font-weight: 800; color: #0f172a;">Subir desde Galería</div>
+          <div style="font-size: 0.76rem; color: #64748b; font-weight: 500;">Elige una foto de tu teléfono</div>
+        </div>
+        <i class="fa-solid fa-chevron-right" style="color: #cbd5e1; font-size: 0.85rem;"></i>
+      </button>
+
+      <button type="button" onclick="closePhotoModal()" style="width: 100%; margin-top: 14px; background: transparent; border: none; font-size: 0.85rem; font-weight: 700; color: #94a3b8; padding: 6px; cursor: pointer;">
+        Cancelar
+      </button>
     </div>
   </div>
 
@@ -1901,11 +1982,8 @@
                      oninput="updateProductName(${prod.id}, this.value)" />
             </div>
             <div class="card-top-actions">
-              <button type="button" class="btn-action-icon btn-camera" title="Tomar foto con la cámara" onclick="triggerCamera(${prod.id})">
+              <button type="button" class="btn-action-icon btn-camera" title="Agregar foto del producto (Cámara o Galería)" onclick="openPhotoModal(${prod.id})">
                 <i class="fa-solid fa-camera"></i>
-              </button>
-              <button type="button" class="btn-action-icon btn-gallery" title="Subir foto desde la galería" onclick="triggerGallery(${prod.id})">
-                <i class="fa-solid fa-images"></i>
               </button>
               <button type="button" class="btn-action-icon btn-eraser" title="Borrar nombre del producto" onclick="clearProductName(${prod.id})">
                 <i class="fa-solid fa-eraser"></i>
@@ -1916,9 +1994,8 @@
                 </button>
               ` : ''}
             </div>
-            <!-- Input para tomar foto con la cámara -->
+            <!-- Inputs ocultos para cámara y galería -->
             <input type="file" id="camera-file-${prod.id}" accept="image/*" capture="environment" style="display:none;" onchange="handleProductPhoto(${prod.id}, this)">
-            <!-- Input para subir foto desde la galería -->
             <input type="file" id="gallery-file-${prod.id}" accept="image/*" style="display:none;" onchange="handleProductPhoto(${prod.id}, this)">
           </div>
 
@@ -2049,16 +2126,34 @@
       calculateWinner(false);
     }
 
-    // Disparar input de cámara
-    function triggerCamera(id) {
-      const fileInput = document.getElementById(`camera-file-${id}`);
-      if (fileInput) fileInput.click();
+    // Manejo de Selección de Foto (Cámara o Galería dentro de un solo menú)
+    let activePhotoTargetId = null;
+
+    function openPhotoModal(id) {
+      activePhotoTargetId = id;
+      const modal = document.getElementById('photoChoiceModal');
+      if (modal) modal.classList.add('open');
     }
 
-    // Disparar input de galería
-    function triggerGallery(id) {
-      const fileInput = document.getElementById(`gallery-file-${id}`);
-      if (fileInput) fileInput.click();
+    function closePhotoModal(e) {
+      const modal = document.getElementById('photoChoiceModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function chooseCameraOption() {
+      if (activePhotoTargetId) {
+        const fileInput = document.getElementById(`camera-file-${activePhotoTargetId}`);
+        closePhotoModal();
+        if (fileInput) fileInput.click();
+      }
+    }
+
+    function chooseGalleryOption() {
+      if (activePhotoTargetId) {
+        const fileInput = document.getElementById(`gallery-file-${activePhotoTargetId}`);
+        closePhotoModal();
+        if (fileInput) fileInput.click();
+      }
     }
 
     // Procesar foto tomada con compresión rápida (Canvas)
