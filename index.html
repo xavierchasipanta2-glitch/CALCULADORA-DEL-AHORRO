@@ -847,7 +847,15 @@
       background: #f0fdf4;
     }
 
-    /* Botón de Instalación PWA */
+    /* Botón de Instalación PWA y Acciones de Encabezado */
+    .header-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
     .btn-install-pwa {
       background: linear-gradient(135deg, #059669, #047857);
       color: white;
@@ -862,12 +870,345 @@
       gap: 8px;
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
       transition: all 0.25s ease;
-      margin-top: 8px;
     }
 
     .btn-install-pwa:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+    }
+
+    .btn-history-pill {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .btn-history-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Banner Carrusel Publicitario / Tips Interactivos */
+    .tips-carousel-banner {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 20px;
+      padding: 16px 20px;
+      box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.22);
+      margin: 18px 0 24px 0;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .carousel-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .carousel-badge-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #b45309;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-carousel-nav {
+      background: white;
+      border: 1.5px solid #fcd34d;
+      color: #b45309;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .btn-carousel-nav:hover {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .carousel-slides-container {
+      position: relative;
+      min-height: 65px;
+      overflow: hidden;
+    }
+
+    .carousel-slide {
+      display: none;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: all 0.45s ease;
+    }
+
+    .carousel-slide.active {
+      display: block;
+      opacity: 1;
+      transform: translateX(0);
+      animation: slideInBanner 0.45s ease forwards;
+    }
+
+    @keyframes slideInBanner {
+      from { opacity: 0; transform: translateX(35px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .slide-tip-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #92400e;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-tip-text {
+      font-size: 0.9rem;
+      color: #78350f;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fde68a;
+      border: 1px solid #d97706;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .carousel-dot.active {
+      background: #d97706;
+      width: 22px;
+      border-radius: 10px;
+    }
+
+    /* Acciones en la cabecera de la tarjeta: Cámara y Limpiar */
+    .card-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-top: 16px;
+    }
+
+    .btn-action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .btn-camera {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #bae6fd;
+    }
+
+    .btn-camera:hover {
+      background: #0284c7;
+      color: white;
+      transform: scale(1.08);
+    }
+
+    .btn-clear-card {
+      background: #fef2f2;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+    }
+
+    .btn-clear-card:hover {
+      background: #ef4444;
+      color: white;
+      transform: scale(1.08);
+    }
+
+    .btn-remove-option {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-remove-option:hover {
+      background: #64748b;
+      color: white;
+      transform: scale(1.08);
+    }
+
+    /* Vista previa de foto de producto */
+    .product-photo-box {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px dashed #38bdf8;
+      max-height: 130px;
+      background: #f0f9ff;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
+    .product-photo-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
+
+    .btn-remove-photo {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .btn-remove-photo:hover {
+      background: #ef4444;
+      transform: scale(1.1);
+    }
+
+    /* Botón Guardar Oferta */
+    .btn-save-offer {
+      background: #ecfdf5;
+      border: 1.5px solid #6ee7b7;
+      color: #047857;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 8px;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .btn-save-offer:hover {
+      background: #10b981;
+      color: white;
+      border-color: #10b981;
+    }
+
+    /* Lista de Historial en Modal */
+    .saved-offer-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      position: relative;
+    }
+
+    .saved-offer-img {
+      width: 65px;
+      height: 65px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .saved-offer-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .saved-offer-title {
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .saved-offer-price {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #047857;
+      margin-top: 2px;
+    }
+
+    .saved-offer-date {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .btn-delete-saved-offer {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-delete-saved-offer:hover {
+      transform: scale(1.15);
     }
 
     /* Responsive adjustments */
@@ -903,12 +1244,66 @@
       <p class="app-subtitle">
         ¡No caigas en las trampas del mercado! Compara el precio real por libra o kilo entre 2 o más presentaciones y descubre cuál te conviene de verdad.
       </p>
-      <div>
+      <div class="header-actions-row">
         <button id="btnInstallPWA" class="btn-install-pwa" onclick="installPWA()">
           <i class="fa-solid fa-cloud-arrow-down"></i> Instalar como App (PWA)
         </button>
+        <button class="btn-history-pill" onclick="openHistoryModal()">
+          <i class="fa-solid fa-camera-retro"></i> Mis Ofertas Guardadas (<span id="historyBadgeCount">0</span>)
+        </button>
       </div>
     </header>
+
+    <!-- Banner Carrusel Publicitario / Tips Interactivos Deslizables -->
+    <div class="tips-carousel-banner" id="tipsCarouselBanner" onmouseenter="pauseTipsCarousel()" onmouseleave="resumeTipsCarousel()">
+      <div class="carousel-top-bar">
+        <span class="carousel-badge-title">
+          <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Tips de oro para amas de casa y compradores inteligentes
+        </span>
+        <div class="carousel-controls">
+          <button class="btn-carousel-nav" onclick="prevTip(event)" title="Tip anterior">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button class="btn-carousel-nav" onclick="nextTip(event)" title="Siguiente tip">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="carousel-slides-container">
+        <div class="carousel-slide active" data-index="0">
+          <div class="slide-tip-title">⚠️ 1. El truco del empaque "Ahorro" o "Familiar"</div>
+          <div class="slide-tip-text">
+            ¡Cuidado! En muchos supermercados las presentaciones gigantes parecen más baratas, pero al calcular por libra o kilo salen más caras que dos paquetes medianos. ¡Calcula siempre antes de pagar!
+          </div>
+        </div>
+        <div class="carousel-slide" data-index="1">
+          <div class="slide-tip-title">⚖️ 2. Equivalencia clave en el mercado</div>
+          <div class="slide-tip-text">
+            <strong>1 Kilo = 2.2046 Libras</strong> (aprox. 2.2 lb). <strong>1 Libra = 453.6 gramos</strong> o 16 onzas. ¡Compara siempre en la misma unidad mínima para defender tu dinero!
+          </div>
+        </div>
+        <div class="carousel-slide" data-index="2">
+          <div class="slide-tip-title">🏷️ 3. El engaño de las ofertas 2x1 y 3x2</div>
+          <div class="slide-tip-text">
+            Suma el peso total de todos los paquetes de la promoción y pon el precio final que pagarás en caja. Muchas veces inflan el precio original.
+          </div>
+        </div>
+        <div class="carousel-slide" data-index="3">
+          <div class="slide-tip-title">🥩 4. El agua y el hielo pesan como carne</div>
+          <div class="slide-tip-text">
+            En pollos, carnes y mariscos congelados, el peso suele incluir salmuera o glaseado de hielo. Fíjate en el peso neto escurrido para no pagar agua a precio de carne.
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-dots" id="carouselDots">
+        <span class="carousel-dot active" onclick="goToTip(0)"></span>
+        <span class="carousel-dot" onclick="goToTip(1)"></span>
+        <span class="carousel-dot" onclick="goToTip(2)"></span>
+        <span class="carousel-dot" onclick="goToTip(3)"></span>
+      </div>
+    </div>
 
     <!-- 1. Tarjetas de Productos (Aparecen de primero para ingresar datos rápido) -->
     <div class="products-grid" id="productsGrid">
@@ -1076,6 +1471,65 @@
     </div>
   </div>
 
+  <!-- Modal de Mis Ofertas Guardadas en el Mercado (con Fotos) -->
+  <div class="modal-overlay" id="historyModal" onclick="closeHistoryModal(event)">
+    <div class="modal-card" style="max-height: 85vh; display: flex; flex-direction: column;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-shrink: 0;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0f172a;">
+          <i class="fa-solid fa-camera-retro" style="color: #0284c7;"></i> Mis Ofertas del Mercado
+        </h3>
+        <button onclick="closeHistoryModal()" style="border: none; background: transparent; font-size: 1.2rem; cursor: pointer; color: #64748b;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px; flex-shrink: 0;">
+        Aquí tienes todas las fotos y precios que guardaste en tus compras para revisarlas con calma en casa:
+      </p>
+
+      <div id="savedOffersList" style="overflow-y: auto; flex: 1; padding-right: 4px;">
+        <!-- Lista dinámica de ofertas guardadas -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; pt-2 border-top: 1px solid #e2e8f0; flex-shrink: 0; gap: 8px;">
+        <button onclick="clearAllHistory()" style="background: #fee2e2; border: none; color: #ef4444; padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-trash"></i> Vaciar Historial
+        </button>
+        <button onclick="toggleFirebaseConfigModal()" style="background: #f0fdf4; border: 1.5px solid #86efac; color: #166534; padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-cloud"></i> Firebase / Nube
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para ver Foto en Pantalla Completa -->
+  <div class="modal-overlay" id="fullPhotoModal" onclick="closeFullPhotoModal()">
+    <div style="max-width: 90vw; max-height: 85vh; position: relative; text-align: center;" onclick="event.stopPropagation()">
+      <button onclick="closeFullPhotoModal()" style="position: absolute; top: -14px; right: -14px; background: white; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <img id="fullPhotoImg" src="" style="max-width: 100%; max-height: 75vh; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);" />
+      <div id="fullPhotoCaption" style="color: white; font-weight: 700; margin-top: 10px; font-size: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);"></div>
+    </div>
+  </div>
+
+  <!-- Modal Configuración Firebase -->
+  <div class="modal-overlay" id="firebaseConfigModal" onclick="toggleFirebaseConfigModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+        <i class="fa-solid fa-fire" style="color: #f59e0b;"></i> Conexión con Firebase
+      </h3>
+      <p style="font-size: 0.85rem; color: #64748b; line-height: 1.4; margin-bottom: 14px;">
+        Tus ofertas se guardan automáticamente y de forma segura en tu teléfono. Si deseas sincronizarlas con tu propia base de datos de Firebase, pega tu configuración aquí:
+      </p>
+      <textarea id="firebaseConfigInput" style="width: 100%; height: 110px; font-family: monospace; font-size: 0.78rem; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 10px; outline: none; margin-bottom: 12px;" placeholder='{ "apiKey": "...", "projectId": "...", "storageBucket": "..." }'></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button onclick="toggleFirebaseConfigModal()" style="background: #f1f5f9; border: none; padding: 8px 14px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">Cancelar</button>
+        <button onclick="saveFirebaseConfig()" style="background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer;">Guardar Configuración</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast" id="toastMessage">
     <i class="fa-solid fa-circle-check" style="color: #34d399;"></i>
@@ -1125,6 +1579,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderProducts();
       calculateWinner(false);
+      updateHistoryBadge();
+      startTipsCarousel();
     });
 
     // Cambiar Unidad Base (Libras o Kilos)
@@ -1162,20 +1618,40 @@
           </div>
 
           <div class="card-header">
-            <div style="width: 100%;">
+            <div style="flex: 1; min-width: 0;">
               <label class="field-label" style="display: block; margin-bottom: 4px;">
                 <i class="fa-solid fa-pen-to-square"></i> Nombre del producto
               </label>
-              <input type="text" class="product-tag-input" value="${prod.name}" 
+              <input type="text" class="product-tag-input" id="prod-name-input-${prod.id}" value="${prod.name}" 
                      placeholder="Nombre del producto (ej. Café Buen Día)" 
                      oninput="updateProductName(${prod.id}, this.value)" />
             </div>
-            ${appState.products.length > 2 ? `
-              <button class="btn-remove-product" title="Eliminar opción" onclick="removeProduct(${prod.id})">
+            <div class="card-top-actions">
+              <button type="button" class="btn-action-icon btn-camera" title="Tomar foto del producto con la cámara" onclick="triggerCamera(${prod.id})">
+                <i class="fa-solid fa-camera"></i>
+              </button>
+              <button type="button" class="btn-action-icon btn-clear-card" title="Borrar y limpiar datos de este producto" onclick="clearProductCard(${prod.id})">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
-            ` : ''}
+              ${appState.products.length > 2 ? `
+                <button type="button" class="btn-action-icon btn-remove-option" title="Eliminar opción" onclick="removeProduct(${prod.id})">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              ` : ''}
+            </div>
+            <!-- Input de archivo para cámara en celular -->
+            <input type="file" id="camera-file-${prod.id}" accept="image/*" capture="environment" style="display:none;" onchange="handleProductPhoto(${prod.id}, this)">
           </div>
+
+          <!-- Si el producto tiene foto tomada, mostrar miniatura -->
+          ${prod.photo ? `
+            <div class="product-photo-box">
+              <img src="${prod.photo}" class="product-photo-img" onclick="previewImageFull('${prod.photo}', '${prod.name || 'Producto'}')" title="Toca para ver foto en grande" />
+              <button type="button" class="btn-remove-photo" onclick="removeProductPhoto(${prod.id})" title="Quitar foto">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          ` : ''}
 
           <div class="field-group">
             <label class="field-label">
@@ -1215,6 +1691,9 @@
             <div class="result-unit-label">Costo por ${appState.baseUnit === 'lb' ? 'Libra' : 'Kilo'}</div>
             <div class="result-unit-price" id="unit-price-display-${prod.id}">- - -</div>
             <div class="result-secondary-calc" id="secondary-price-display-${prod.id}">Ingresa precio y peso</div>
+            <button type="button" class="btn-save-offer" onclick="saveOfferToHistory(${prod.id})" title="Guardar oferta para revisar en casa">
+              <i class="fa-solid fa-bookmark"></i> Guardar Oferta (con Foto)
+            </button>
           </div>
         `;
 
@@ -1274,6 +1753,294 @@
       appState.products = appState.products.filter(p => p.id !== id);
       renderProducts();
       calculateWinner(false);
+    }
+
+    // Disparar input de cámara
+    function triggerCamera(id) {
+      const fileInput = document.getElementById(`camera-file-${id}`);
+      if (fileInput) fileInput.click();
+    }
+
+    // Procesar foto tomada con compresión rápida (Canvas)
+    function handleProductPhoto(id, input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // Redimensionar para optimizar peso (máx 800px)
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 800;
+
+          if (width > height && width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+          const prod = appState.products.find(p => p.id === id);
+          if (prod) {
+            prod.photo = compressedDataUrl;
+            renderProducts();
+            calculateWinner(false);
+            showToast('📷 ¡Foto del producto guardada!');
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Quitar foto del producto
+    function removeProductPhoto(id) {
+      const prod = appState.products.find(p => p.id === id);
+      if (prod) {
+        prod.photo = null;
+        renderProducts();
+        calculateWinner(false);
+        showToast('Foto eliminada');
+      }
+    }
+
+    // Borrar y limpiar rápidamente datos de un producto (Tacho de basura)
+    function clearProductCard(id) {
+      const prod = appState.products.find(p => p.id === id);
+      if (prod) {
+        prod.name = '';
+        prod.price = '';
+        prod.quantity = '';
+        prod.photo = null;
+        renderProducts();
+        calculateWinner(false);
+        // Poner foco en el campo para escribir de inmediato
+        setTimeout(() => {
+          const input = document.getElementById(`prod-name-input-${id}`);
+          if (input) input.focus();
+        }, 80);
+        showToast('🗑️ Producto limpiado. Listo para escribir uno nuevo');
+      }
+    }
+
+    // Guardar oferta en Historial (para revisar al llegar a casa)
+    function saveOfferToHistory(id) {
+      const prod = appState.products.find(p => p.id === id);
+      if (!prod) return;
+
+      const price = parseFloat(prod.price);
+      const qty = parseFloat(prod.quantity);
+
+      if (isNaN(price) || price <= 0 || isNaN(qty) || qty <= 0) {
+        showToast('⚠️ Ingresa primero el precio y el peso para calcular y guardar');
+        return;
+      }
+
+      const totalLb = qty * (CONVERSIONS_TO_LB[prod.unit] || 1);
+      const totalKg = qty * (CONVERSIONS_TO_KG[prod.unit] || 1);
+      const pricePerLb = (price / totalLb).toFixed(3);
+      const pricePerKg = (price / totalKg).toFixed(3);
+
+      const offer = {
+        id: Date.now(),
+        name: prod.name.trim() || 'Producto sin nombre',
+        price: price.toFixed(2),
+        quantity: qty,
+        unit: prod.unit,
+        pricePerLb,
+        pricePerKg,
+        photo: prod.photo || null,
+        currency: appState.currency,
+        date: new Date().toLocaleDateString('es-ES', { 
+          day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+        })
+      };
+
+      const history = getSavedOffers();
+      history.unshift(offer);
+      localStorage.setItem('ofertas_mercado_guardadas', JSON.stringify(history));
+      updateHistoryBadge();
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+      }
+
+      showToast('💾 ¡Oferta guardada! Podrás revisarla cuando llegues a casa');
+    }
+
+    function getSavedOffers() {
+      try {
+        return JSON.parse(localStorage.getItem('ofertas_mercado_guardadas')) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function updateHistoryBadge() {
+      const count = getSavedOffers().length;
+      const badge = document.getElementById('historyBadgeCount');
+      if (badge) badge.textContent = count;
+    }
+
+    function openHistoryModal() {
+      const offers = getSavedOffers();
+      const listEl = document.getElementById('savedOffersList');
+      if (!listEl) return;
+
+      if (offers.length === 0) {
+        listEl.innerHTML = `
+          <div style="text-align: center; padding: 30px 10px; color: #94a3b8;">
+            <i class="fa-solid fa-camera" style="font-size: 2.5rem; margin-bottom: 10px; color: #cbd5e1;"></i>
+            <p style="font-size: 0.95rem; font-weight: 600;">No tienes ofertas guardadas aún</p>
+            <p style="font-size: 0.8rem; margin-top: 4px;">Cuando estés en el mercado, toma una foto con el icono 📷 y pulsa "Guardar Oferta".</p>
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = '';
+        offers.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'saved-offer-card';
+          card.innerHTML = `
+            ${item.photo ? `
+              <img src="${item.photo}" class="saved-offer-img" onclick="previewImageFull('${item.photo}', '${item.name}')" title="Toca para ver foto ampliada" />
+            ` : `
+              <div style="width: 65px; height: 65px; border-radius: 10px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem; flex-shrink: 0;">
+                <i class="fa-solid fa-basket-shopping"></i>
+              </div>
+            `}
+            <div class="saved-offer-info">
+              <div class="saved-offer-title">${item.name}</div>
+              <div class="saved-offer-price">
+                ${item.currency}${item.price} (${item.quantity} ${item.unit}) ➔ <strong>${item.currency}${item.pricePerLb}/lb</strong>
+              </div>
+              <div class="saved-offer-date"><i class="fa-regular fa-clock"></i> ${item.date}</div>
+            </div>
+            <button class="btn-delete-saved-offer" onclick="deleteSavedOffer(${item.id})" title="Eliminar oferta">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          `;
+          listEl.appendChild(card);
+        });
+      }
+
+      document.getElementById('historyModal').classList.add('open');
+    }
+
+    function closeHistoryModal() {
+      document.getElementById('historyModal').classList.remove('open');
+    }
+
+    function deleteSavedOffer(id) {
+      let offers = getSavedOffers().filter(o => o.id !== id);
+      localStorage.setItem('ofertas_mercado_guardadas', JSON.stringify(offers));
+      updateHistoryBadge();
+      openHistoryModal();
+      showToast('Oferta eliminada del historial');
+    }
+
+    function clearAllHistory() {
+      if (confirm('¿Deseas vaciar todas las ofertas guardadas de tu historial?')) {
+        localStorage.removeItem('ofertas_mercado_guardadas');
+        updateHistoryBadge();
+        openHistoryModal();
+        showToast('Historial vaciado');
+      }
+    }
+
+    // Visualizar Foto en Pantalla Completa
+    function previewImageFull(src, caption) {
+      document.getElementById('fullPhotoImg').src = src;
+      document.getElementById('fullPhotoCaption').textContent = caption || 'Foto del producto';
+      document.getElementById('fullPhotoModal').classList.add('open');
+    }
+
+    function closeFullPhotoModal() {
+      document.getElementById('fullPhotoModal').classList.remove('open');
+    }
+
+    // Configuración Firebase
+    function toggleFirebaseConfigModal() {
+      const modal = document.getElementById('firebaseConfigModal');
+      const savedConfig = localStorage.getItem('firebase_config_mercado');
+      if (savedConfig) {
+        document.getElementById('firebaseConfigInput').value = savedConfig;
+      }
+      modal.classList.toggle('open');
+    }
+
+    function saveFirebaseConfig() {
+      const val = document.getElementById('firebaseConfigInput').value.trim();
+      if (val) {
+        localStorage.setItem('firebase_config_mercado', val);
+        showToast('☁️ Configuración de Firebase guardada con éxito');
+      } else {
+        localStorage.removeItem('firebase_config_mercado');
+        showToast('Configuración eliminada (usando almacenamiento local)');
+      }
+      toggleFirebaseConfigModal();
+    }
+
+    // ==========================================
+    // Lógica del Carrusel Banner de Tips
+    // ==========================================
+    let currentTipIndex = 0;
+    let tipsCarouselTimer = null;
+
+    function showTip(index) {
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('.carousel-dot');
+      if (!slides.length) return;
+
+      if (index >= slides.length) currentTipIndex = 0;
+      else if (index < 0) currentTipIndex = slides.length - 1;
+      else currentTipIndex = index;
+
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentTipIndex);
+      });
+
+      dots.forEach((d, idx) => {
+        d.classList.toggle('active', idx === currentTipIndex);
+      });
+    }
+
+    function nextTip(e) {
+      if (e) e.stopPropagation();
+      showTip(currentTipIndex + 1);
+    }
+
+    function prevTip(e) {
+      if (e) e.stopPropagation();
+      showTip(currentTipIndex - 1);
+    }
+
+    function goToTip(index) {
+      showTip(index);
+    }
+
+    function startTipsCarousel() {
+      if (tipsCarouselTimer) clearInterval(tipsCarouselTimer);
+      tipsCarouselTimer = setInterval(() => {
+        nextTip();
+      }, 5500);
+    }
+
+    function pauseTipsCarousel() {
+      if (tipsCarouselTimer) clearInterval(tipsCarouselTimer);
+    }
+
+    function resumeTipsCarousel() {
+      startTipsCarousel();
     }
 
     // Cálculo central
