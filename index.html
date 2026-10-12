@@ -1455,6 +1455,38 @@
       border-color: #10b981;
     }
 
+    /* Barra superior para Guardar Comparación Completa (entre Tips y Producto) */
+    .top-save-session-bar {
+      display: flex;
+      justify-content: center;
+      margin: -6px 0 18px 0;
+    }
+
+    .btn-save-session-top {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      padding: 13px 24px;
+      border-radius: 16px;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.4);
+      transition: all 0.25s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .btn-save-session-top:hover, .btn-save-session-top:active {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(124, 58, 237, 0.55);
+      background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    }
+
     /* Lista de Historial en Modal */
     .saved-offer-card {
       background: #f8fafc;
@@ -1463,9 +1495,24 @@
       padding: 12px 14px;
       margin-bottom: 12px;
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .saved-offer-card:hover, .saved-offer-card:active {
+      border-color: #0284c7;
+      background: #f0f9ff;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+    }
+
+    .saved-offer-main-row {
+      display: flex;
       gap: 12px;
       align-items: center;
-      position: relative;
+      width: 100%;
     }
 
     .saved-offer-img {
@@ -1492,6 +1539,13 @@
       text-overflow: ellipsis;
     }
 
+    .saved-offer-store-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #0369a1;
+      margin-top: 1px;
+    }
+
     .saved-offer-price {
       font-size: 0.88rem;
       font-weight: 700;
@@ -1505,18 +1559,69 @@
       margin-top: 2px;
     }
 
-    .btn-delete-saved-offer {
-      background: transparent;
+    .saved-offer-actions-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .btn-open-saved-offer {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
       border: none;
-      color: #ef4444;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
-      font-size: 1rem;
-      padding: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       transition: all 0.2s;
     }
 
+    .btn-open-saved-offer:hover {
+      background: #075985;
+    }
+
+    .btn-compare-saved-offer {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #6ee7b7;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-compare-saved-offer:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-delete-saved-offer {
+      background: #fee2e2;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      margin-left: auto;
+    }
+
     .btn-delete-saved-offer:hover {
-      transform: scale(1.15);
+      background: #ef4444;
+      color: white;
     }
 
     /* Responsive adjustments */
@@ -1631,6 +1736,13 @@
       <option value="Feria Libre"></option>
     </datalist>
 
+    <!-- Botón de Acceso Rápido: Guardar Comparación Completa (entre Tips de Oro y Nombre del Producto) -->
+    <div class="top-save-session-bar">
+      <button type="button" class="btn-save-session-top" onclick="saveCurrentSession()">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar Comparación Completa
+      </button>
+    </div>
+
     <!-- 1. Tarjetas de Productos (Aparecen de primero para ingresar datos rápido) -->
     <div class="products-grid" id="productsGrid">
       <!-- Los productos se generan dinámicamente con JS -->
@@ -1640,9 +1752,6 @@
     <div class="bottom-actions" style="margin-top: 0px; margin-bottom: 24px;">
       <button class="btn-action btn-action-primary" onclick="calculateWinner(true)">
         <i class="fa-solid fa-calculator"></i> Comparar y Ver Mejor Precio
-      </button>
-      <button class="btn-action" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white;" onclick="saveCurrentSession()">
-        <i class="fa-solid fa-floppy-disk"></i> Guardar Comparación Completa
       </button>
       <button class="btn-action btn-action-secondary" onclick="shareComparison()">
         <i class="fa-solid fa-share-nodes"></i> Compartir
@@ -1691,7 +1800,7 @@
 
     <!-- Footer con Versión y Autor -->
     <footer class="app-footer">
-      <div class="footer-badge">v1.1.8</div>
+      <div class="footer-badge">v1.1.9</div>
       <p class="footer-author">Creado by <strong>Xavier Chasipanta</strong></p>
       <p class="footer-subtitle">Defiende Tu Bolsillo • Calculadora de Ofertas de Mercado</p>
     </footer>
@@ -1778,7 +1887,7 @@
       </div>
 
       <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px; flex-shrink: 0;">
-        Aquí tienes todas las fotos y precios que guardaste en tus compras para revisarlas con calma en casa:
+        <strong>¡Toca cualquier oferta o pulsa "Abrir"</strong> para volver a cargarla en la calculadora! También puedes tocar su foto para verla en grande:
       </p>
 
       <div id="savedOffersList" style="overflow-y: auto; flex: 1; padding-right: 4px;">
@@ -2058,7 +2167,7 @@
           </div>
 
           <div class="card-result-box" id="calc-box-${prod.id}">
-            <div class="result-unit-label">Costo por ${appState.baseUnit === 'lb' ? 'Libra' : 'Kilo'}</div>
+            <div class="result-unit-label" id="unit-label-display-${prod.id}">Costo por ${prod.unit === 'un' ? 'Unidad' : (appState.baseUnit === 'lb' ? 'Libra' : 'Kilo')}</div>
             <div class="result-unit-price" id="unit-price-display-${prod.id}">- - -</div>
             <div class="result-secondary-calc" id="secondary-price-display-${prod.id}">Ingresa precio y peso</div>
             <button type="button" class="btn-save-offer" onclick="saveOfferToHistory(${prod.id})" title="Guardar oferta para revisar en casa">
@@ -2244,6 +2353,7 @@
       const offer = {
         id: Date.now(),
         name: prod.name.trim() || 'Producto sin nombre',
+        store: prod.store ? prod.store.trim() : '',
         price: price.toFixed(2),
         quantity: qty,
         unit: prod.unit,
@@ -2251,6 +2361,8 @@
         pricePerKg,
         photo: prod.photo || null,
         currency: appState.currency,
+        baseUnit: appState.baseUnit,
+        productsSnapshot: JSON.parse(JSON.stringify(appState.products)),
         date: new Date().toLocaleDateString('es-ES', { 
           day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
         })
@@ -2265,7 +2377,7 @@
         confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
       }
 
-      showToast('💾 ¡Oferta guardada! Podrás revisarla cuando llegues a casa');
+      showToast('💾 ¡Oferta guardada! Podrás abrirla cuando quieras en Mis Ofertas');
     }
 
     function getSavedOffers() {
@@ -2300,30 +2412,106 @@
         offers.forEach(item => {
           const card = document.createElement('div');
           card.className = 'saved-offer-card';
+          card.onclick = () => loadOfferFromHistory(item.id, 1);
+
+          // Si la unidad es "un" (unidades), mostrar costo por unidad (/un), de lo contrario en libras (/lb)
+          const isUnits = item.unit === 'un';
+          const unitPriceVal = isUnits
+            ? (parseFloat(item.price) / parseFloat(item.quantity || 1)).toFixed(3)
+            : item.pricePerLb;
+          const unitLabelSuffix = isUnits ? 'unidad' : 'lb';
+
           card.innerHTML = `
-            ${item.photo ? `
-              <img src="${item.photo}" class="saved-offer-img" onclick="previewImageFull('${item.photo}', '${item.name}')" title="Toca para ver foto ampliada" />
-            ` : `
-              <div style="width: 65px; height: 65px; border-radius: 10px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem; flex-shrink: 0;">
-                <i class="fa-solid fa-basket-shopping"></i>
+            <div class="saved-offer-main-row">
+              ${item.photo ? `
+                <img src="${item.photo}" class="saved-offer-img" onclick="event.stopPropagation(); previewImageFull('${item.photo}', '${item.name}')" title="Toca la foto para verla en grande" />
+              ` : `
+                <div style="width: 65px; height: 65px; border-radius: 10px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem; flex-shrink: 0;">
+                  <i class="fa-solid fa-basket-shopping"></i>
+                </div>
+              `}
+              <div class="saved-offer-info">
+                <div class="saved-offer-title">${item.name}</div>
+                ${item.store ? `<div class="saved-offer-store-tag"><i class="fa-solid fa-location-dot"></i> ${item.store}</div>` : ''}
+                <div class="saved-offer-price">
+                  ${item.currency}${item.price} (${item.quantity} ${item.unit}) ➔ <strong>${item.currency}${unitPriceVal}/${unitLabelSuffix}</strong>
+                </div>
+                <div class="saved-offer-date"><i class="fa-regular fa-clock"></i> ${item.date}</div>
               </div>
-            `}
-            <div class="saved-offer-info">
-              <div class="saved-offer-title">${item.name}</div>
-              <div class="saved-offer-price">
-                ${item.currency}${item.price} (${item.quantity} ${item.unit}) ➔ <strong>${item.currency}${item.pricePerLb}/lb</strong>
-              </div>
-              <div class="saved-offer-date"><i class="fa-regular fa-clock"></i> ${item.date}</div>
             </div>
-            <button class="btn-delete-saved-offer" onclick="deleteSavedOffer(${item.id})" title="Eliminar oferta">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+            <div class="saved-offer-actions-row">
+              <button type="button" class="btn-open-saved-offer" onclick="event.stopPropagation(); loadOfferFromHistory(${item.id}, 1)" title="Abrir esta oferta en la calculadora">
+                <i class="fa-solid fa-folder-open"></i> Abrir en Calculadora
+              </button>
+              <button type="button" class="btn-compare-saved-offer" onclick="event.stopPropagation(); loadOfferFromHistory(${item.id}, 2)" title="Colocar como segundo producto para comparar">
+                <i class="fa-solid fa-code-compare"></i> + Comparar (Opción 2)
+              </button>
+              <button type="button" class="btn-delete-saved-offer" onclick="event.stopPropagation(); deleteSavedOffer(${item.id})" title="Eliminar oferta">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           `;
           listEl.appendChild(card);
         });
       }
 
       document.getElementById('historyModal').classList.add('open');
+    }
+
+    // Cargar una oferta guardada del historial de nuevo a la calculadora
+    function loadOfferFromHistory(id, targetSlot = 1) {
+      const offers = getSavedOffers();
+      const item = offers.find(o => o.id === id);
+      if (!item) return;
+
+      if (targetSlot === 2) {
+        // Colocar en la segunda tarjeta ("COMPARAR CON PRODUCTO")
+        if (appState.products.length < 2) {
+          addProduct();
+        }
+        appState.products[1] = {
+          id: appState.products[1].id || Date.now(),
+          name: item.name || 'Producto 2',
+          store: item.store || '',
+          price: parseFloat(item.price) || '',
+          quantity: parseFloat(item.quantity) || '',
+          unit: item.unit || 'lb',
+          photo: item.photo || null,
+          multiUnits: 1
+        };
+      } else {
+        // Si tiene captura completa de los productos de esa sesión con al menos 2 productos con precio, restaurar todo
+        const hasFullComparison = item.productsSnapshot &&
+          Array.isArray(item.productsSnapshot) &&
+          item.productsSnapshot.filter(p => parseFloat(p.price) > 0 && parseFloat(p.quantity) > 0).length >= 2;
+
+        if (hasFullComparison) {
+          appState.products = JSON.parse(JSON.stringify(item.productsSnapshot));
+        } else {
+          // Cargar la oferta directamente en el Producto 1
+          if (appState.products.length === 0) {
+            appState.products.push({ id: 1, name: '', store: '', price: '', quantity: '', unit: 'lb', multiUnits: 1 });
+          }
+          appState.products[0] = {
+            id: appState.products[0].id || 1,
+            name: item.name || 'Producto 1',
+            store: item.store || '',
+            price: parseFloat(item.price) || '',
+            quantity: parseFloat(item.quantity) || '',
+            unit: item.unit || 'lb',
+            photo: item.photo || null,
+            multiUnits: 1
+          };
+        }
+      }
+
+      renderProducts();
+      calculateWinner(true);
+      closeHistoryModal();
+      showToast(`📂 ¡"${item.name}" abierto en la calculadora!`);
+
+      const grid = document.getElementById('productsGrid');
+      if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function closeHistoryModal() {
@@ -2622,6 +2810,7 @@
 
       appState.products.forEach(prod => {
         const card = document.getElementById(`product-card-${prod.id}`);
+        const unitLabelEl = document.getElementById(`unit-label-display-${prod.id}`);
         const displayEl = document.getElementById(`unit-price-display-${prod.id}`);
         const secondaryEl = document.getElementById(`secondary-price-display-${prod.id}`);
 
@@ -2629,26 +2818,49 @@
           card.classList.remove('is-winner', 'is-loser');
         }
 
+        const isUnits = prod.unit === 'un';
+        if (unitLabelEl) {
+          unitLabelEl.textContent = `Costo por ${isUnits ? 'Unidad' : (appState.baseUnit === 'lb' ? 'Libra' : 'Kilo')}`;
+        }
+
         const price = parseFloat(prod.price);
         const qty = parseFloat(prod.quantity);
 
         if (!isNaN(price) && price > 0 && !isNaN(qty) && qty > 0) {
-          // Convertir a base LB y KG
           let totalWeightInLb = qty * (CONVERSIONS_TO_LB[prod.unit] || 1);
           let totalWeightInKg = qty * (CONVERSIONS_TO_KG[prod.unit] || 1);
 
           let pricePerLb = price / totalWeightInLb;
           let pricePerKg = price / totalWeightInKg;
 
-          let targetUnitPrice = appState.baseUnit === 'lb' ? pricePerLb : pricePerKg;
-          let secondaryUnitPrice = appState.baseUnit === 'lb' ? pricePerKg : pricePerLb;
-          let secondaryUnitName = appState.baseUnit === 'lb' ? 'kg' : 'lb';
+          let targetUnitPrice;
+          let unitShortLabel;
+          let unitFullName;
 
-          if (displayEl) {
-            displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
-          }
-          if (secondaryEl) {
-            secondaryEl.textContent = `(${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+          if (isUnits) {
+            targetUnitPrice = price / qty;
+            unitShortLabel = 'unidad';
+            unitFullName = 'unidad';
+
+            if (displayEl) {
+              displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / unidad`;
+            }
+            if (secondaryEl) {
+              secondaryEl.textContent = `(${qty} ${qty === 1 ? 'unidad' : 'unidades'} por ${appState.currency}${price.toFixed(2)})`;
+            }
+          } else {
+            targetUnitPrice = appState.baseUnit === 'lb' ? pricePerLb : pricePerKg;
+            let secondaryUnitPrice = appState.baseUnit === 'lb' ? pricePerKg : pricePerLb;
+            let secondaryUnitName = appState.baseUnit === 'lb' ? 'kg' : 'lb';
+            unitShortLabel = appState.baseUnit;
+            unitFullName = appState.baseUnit === 'lb' ? 'libra' : 'kilo';
+
+            if (displayEl) {
+              displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
+            }
+            if (secondaryEl) {
+              secondaryEl.textContent = `(${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+            }
           }
 
           validProducts.push({
@@ -2658,11 +2870,13 @@
             targetUnitPrice,
             pricePerLb,
             pricePerKg,
+            unitShortLabel,
+            unitFullName,
             elementCard: card
           });
         } else {
           if (displayEl) displayEl.textContent = '- - -';
-          if (secondaryEl) secondaryEl.textContent = 'Ingresa precio y peso';
+          if (secondaryEl) secondaryEl.textContent = isUnits ? 'Ingresa precio y cantidad de unidades' : 'Ingresa precio y peso';
         }
       });
 
@@ -2692,14 +2906,17 @@
         verdictContainer.classList.add('show');
         document.getElementById('verdictWinnerName').textContent = `🏆 ¡${winner.name} es la Mejor Opción!`;
         
-        let unitText = appState.baseUnit === 'lb' ? 'libra' : 'kilo';
-        document.getElementById('verdictWinnerPrice').textContent = `${appState.currency}${winner.targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
+        let unitText = winner.unitFullName || (appState.baseUnit === 'lb' ? 'libra' : 'kilo');
+        let winnerShort = winner.unitShortLabel || appState.baseUnit;
+        let loserShort = loser.unitShortLabel || appState.baseUnit;
+
+        document.getElementById('verdictWinnerPrice').textContent = `${appState.currency}${winner.targetUnitPrice.toFixed(3)} / ${winnerShort}`;
         document.getElementById('verdictSavingsPercent').textContent = `${savingsPercent}% Más Barato`;
         document.getElementById('verdictSavingsMoney').textContent = `${appState.currency}${diffUnit.toFixed(3)} menos por ${unitText}`;
 
         document.getElementById('verdictMessage').innerHTML = `
           Comprando <strong>${winner.name}</strong> estás pagando <strong>${appState.currency}${winner.targetUnitPrice.toFixed(3)}</strong> por cada ${unitText}.
-          Es un <strong>${savingsPercent}% más económico</strong> que <strong>${loser.name}</strong> (${appState.currency}${loser.targetUnitPrice.toFixed(3)}/${appState.baseUnit}).
+          Es un <strong>${savingsPercent}% más económico</strong> que <strong>${loser.name}</strong> (${appState.currency}${loser.targetUnitPrice.toFixed(3)}/${loserShort}).
         `;
 
         // Renderizar barras comparativas
@@ -2727,13 +2944,14 @@
       sortedProducts.forEach((p, idx) => {
         const percentWidth = Math.max(25, (p.targetUnitPrice / maxPrice) * 100);
         const isBest = idx === 0;
+        const shortUnit = p.unitShortLabel || (p.unit === 'un' ? 'unidad' : appState.baseUnit);
 
         const row = document.createElement('div');
         row.className = 'bar-row';
         row.innerHTML = `
           <div class="bar-info">
             <span>${isBest ? '👑 ' : ''}${p.name}</span>
-            <span>${appState.currency}${p.targetUnitPrice.toFixed(3)} / ${appState.baseUnit}</span>
+            <span>${appState.currency}${p.targetUnitPrice.toFixed(3)} / ${shortUnit}</span>
           </div>
           <div class="bar-track">
             <div class="bar-fill ${isBest ? 'best' : 'normal'}" style="width: ${percentWidth}%;"></div>
@@ -2749,33 +2967,33 @@
 
       if (type === 'arroz') {
         appState.baseUnit = 'lb';
-        document.getElementById('btnBaseLbs').classList.add('active');
-        document.getElementById('btnBaseKgs').classList.remove('active');
+        document.getElementById('btnBaseLbs')?.classList.add('active');
+        document.getElementById('btnBaseKgs')?.classList.remove('active');
         appState.products = [
-          { id: 1, name: 'Bolsa Chica (450g)', price: 0.85, quantity: 450, unit: 'g', multiUnits: 1 },
-          { id: 2, name: 'Bolsa Mediana (1 Kilo)', price: 1.70, quantity: 1, unit: 'kg', multiUnits: 1 },
-          { id: 3, name: 'Bolsa 5 Libras (Oferta)', price: 3.40, quantity: 5, unit: 'lb', multiUnits: 1 }
+          { id: 1, name: 'Bolsa Chica (450g)', store: '', price: 0.85, quantity: 450, unit: 'g', multiUnits: 1 },
+          { id: 2, name: 'Bolsa Mediana (1 Kilo)', store: '', price: 1.70, quantity: 1, unit: 'kg', multiUnits: 1 },
+          { id: 3, name: 'Bolsa 5 Libras (Oferta)', store: '', price: 3.40, quantity: 5, unit: 'lb', multiUnits: 1 }
         ];
       } else if (type === 'detergente') {
         appState.baseUnit = 'kg';
-        document.getElementById('btnBaseLbs').classList.remove('active');
-        document.getElementById('btnBaseKgs').classList.add('active');
+        document.getElementById('btnBaseLbs')?.classList.remove('active');
+        document.getElementById('btnBaseKgs')?.classList.add('active');
         appState.products = [
-          { id: 1, name: 'Bolsa Mediana (850g)', price: 2.10, quantity: 850, unit: 'g', multiUnits: 1 },
-          { id: 2, name: 'Bolsa Gigante (2.5 Kilos)', price: 6.50, quantity: 2.5, unit: 'kg', multiUnits: 1 }
+          { id: 1, name: 'Bolsa Mediana (850g)', store: '', price: 2.10, quantity: 850, unit: 'g', multiUnits: 1 },
+          { id: 2, name: 'Bolsa Gigante (2.5 Kilos)', store: '', price: 6.50, quantity: 2.5, unit: 'kg', multiUnits: 1 }
         ];
       } else if (type === 'aceite') {
         appState.baseUnit = 'lb';
         appState.products = [
-          { id: 1, name: 'Botella 900 ml', price: 2.25, quantity: 900, unit: 'ml', multiUnits: 1 },
-          { id: 2, name: 'Galón 3.8 Litros', price: 8.90, quantity: 3.8, unit: 'l', multiUnits: 1 }
+          { id: 1, name: 'Botella 900 ml', store: '', price: 2.25, quantity: 900, unit: 'ml', multiUnits: 1 },
+          { id: 2, name: 'Galón 3.8 Litros', store: '', price: 8.90, quantity: 3.8, unit: 'l', multiUnits: 1 }
         ];
       } else if (type === 'tres_productos') {
         appState.baseUnit = 'lb';
         appState.products = [
-          { id: 1, name: 'Pollo Libra Suelta', price: 1.65, quantity: 1, unit: 'lb', multiUnits: 1 },
-          { id: 2, name: 'Bandeja Especial 1.2 kg', price: 4.10, quantity: 1.2, unit: 'kg', multiUnits: 1 },
-          { id: 3, name: 'Combo 3 Libras', price: 4.65, quantity: 3, unit: 'lb', multiUnits: 1 }
+          { id: 1, name: 'Pollo Libra Suelta', store: '', price: 1.65, quantity: 1, unit: 'lb', multiUnits: 1 },
+          { id: 2, name: 'Bandeja Especial 1.2 kg', store: '', price: 4.10, quantity: 1.2, unit: 'kg', multiUnits: 1 },
+          { id: 3, name: 'Combo 3 Libras', store: '', price: 4.65, quantity: 3, unit: 'lb', multiUnits: 1 }
         ];
       }
 
@@ -2815,20 +3033,28 @@
       }
 
       validProds.sort((a, b) => {
-        let aPrice = a.price / (a.quantity * (CONVERSIONS_TO_LB[a.unit] || 1));
-        let bPrice = b.price / (b.quantity * (CONVERSIONS_TO_LB[b.unit] || 1));
+        let aPrice = a.unit === 'un' ? (a.price / a.quantity) : (a.price / (a.quantity * (CONVERSIONS_TO_LB[a.unit] || 1)));
+        let bPrice = b.unit === 'un' ? (b.price / b.quantity) : (b.price / (b.quantity * (CONVERSIONS_TO_LB[b.unit] || 1)));
         return aPrice - bPrice;
       });
 
       const winner = validProds[0];
+      const winnerUnitLabel = winner.unit === 'un' ? 'unidad' : appState.baseUnit;
+      const winnerUnitVal = winner.unit === 'un'
+        ? (winner.price / winner.quantity).toFixed(3)
+        : (winner.price / (winner.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[winner.unit] : CONVERSIONS_TO_KG[winner.unit]))).toFixed(3);
+
       let text = `🛒 *Comparador de Precios de Mercado*\n\n`;
       text += `🏆 *La mejor opción es:* ${winner.name}\n`;
-      text += `💰 *Precio unitario:* ${appState.currency}${(winner.price / (winner.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[winner.unit] : CONVERSIONS_TO_KG[winner.unit]))).toFixed(3)} por ${appState.baseUnit}\n\n`;
+      text += `💰 *Precio unitario:* ${appState.currency}${winnerUnitVal} por ${winnerUnitLabel}\n\n`;
       text += `📋 *Detalle de opciones comparadas:*\n`;
       
       validProds.forEach((p, idx) => {
-        let unitP = (p.price / (p.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[p.unit] : CONVERSIONS_TO_KG[p.unit]))).toFixed(3);
-        text += `${idx === 0 ? '🥇' : '▫️'} ${p.name}: ${appState.currency}${p.price} (${p.quantity} ${p.unit}) -> *${appState.currency}${unitP}/${appState.baseUnit}*\n`;
+        let pUnitLabel = p.unit === 'un' ? 'unidad' : appState.baseUnit;
+        let unitP = p.unit === 'un'
+          ? (p.price / p.quantity).toFixed(3)
+          : (p.price / (p.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[p.unit] : CONVERSIONS_TO_KG[p.unit]))).toFixed(3);
+        text += `${idx === 0 ? '🥇' : '▫️'} ${p.name}${p.store ? ` (${p.store})` : ''}: ${appState.currency}${p.price} (${p.quantity} ${p.unit}) -> *${appState.currency}${unitP}/${pUnitLabel}*\n`;
       });
 
       text += `\n✨ Calculado con la Calculadora de Ofertas Reales`;
