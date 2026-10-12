@@ -1055,16 +1055,17 @@
       transform: scale(1.08);
     }
 
-    .btn-clear-card {
-      background: #fef2f2;
-      color: #ef4444;
-      border: 1px solid #fecaca;
+    .btn-eraser {
+      background: #faf5ff;
+      color: #9333ea;
+      border: 1.5px solid #e9d5ff;
     }
 
-    .btn-clear-card:hover {
-      background: #ef4444;
+    .btn-eraser:hover {
+      background: #9333ea;
       color: white;
       transform: scale(1.08);
+      box-shadow: 0 4px 10px rgba(147, 51, 234, 0.25);
     }
 
     .btn-remove-option {
@@ -1077,6 +1078,39 @@
       background: #64748b;
       color: white;
       transform: scale(1.08);
+    }
+
+    /* Separador centrado entre productos a comparar */
+    .compare-section-divider {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 12px 0;
+      width: 100%;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #10b981, transparent);
+    }
+
+    .divider-text {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 7px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     /* Vista previa de foto de producto */
@@ -1359,79 +1393,6 @@
         <!-- Renderizado dinámico de barras -->
       </div>
     </div>
-
-    <!-- 3. Al final: Configuración de Unidad Base (Libras / Kilos), Moneda y Ejemplos -->
-    <div class="control-panel">
-      <div class="unit-switch-group">
-        <label class="unit-switch-label">
-          <i class="fa-solid fa-arrow-right-arrow-left"></i> Unidad Base de Comparación:
-        </label>
-        <div class="unit-toggle-pills">
-          <button class="unit-pill-btn active" id="btnBaseLbs" onclick="setBaseUnit('lb')">
-            <i class="fa-solid fa-weight-hanging"></i> Libras (lb)
-          </button>
-          <button class="unit-pill-btn" id="btnBaseKgs" onclick="setBaseUnit('kg')">
-            <i class="fa-solid fa-cubes-stacked"></i> Kilos (kg)
-          </button>
-        </div>
-      </div>
-
-      <div class="currency-and-presets">
-        <div>
-          <label class="unit-switch-label" style="margin-bottom: 4px;">
-            <i class="fa-solid fa-coins"></i> Moneda:
-          </label>
-          <select class="currency-select" id="currencySelect" onchange="updateCurrency()">
-            <option value="$">$ Dólar / Peso</option>
-            <option value="S/">S/ Soles</option>
-            <option value="Q">Q Quetzales</option>
-            <option value="L">L Lempiras</option>
-            <option value="C$">C$ Córdobas</option>
-            <option value="₡">₡ Colones</option>
-            <option value="€">€ Euros</option>
-            <option value="Bs">Bs Bolivianos</option>
-          </select>
-        </div>
-
-        <button class="preset-btn" onclick="openPresetsModal()" style="margin-top: 18px;">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Ver Ejemplos Típicos
-        </button>
-      </div>
-    </div>
-
-    <!-- Consejos del Mercado -->
-    <section class="tips-section">
-      <h3 class="tips-title">
-        <i class="fa-solid fa-lightbulb" style="color: #f59e0b;"></i> Tips de oro para amas de casa y compradores inteligentes
-      </h3>
-      <div class="tips-list">
-        <div class="tip-card">
-          <strong>⚠️ El truco del tamaño "Ahorro":</strong>
-          A menudo las presentaciones gigantes o "Familiares" parecen más baratas por empaque, pero al calcular por libra o kilo resultan más caras que dos paquetes medianos.
-        </div>
-        <div class="tip-card">
-          <strong>⚖️ Equivalencia clave:</strong>
-          1 Kilo equivale exactamente a <strong>2.2046 Libras</strong> (o aprox. 2.2 libras). 1 Libra tiene <strong>453.6 gramos</strong> o 16 onzas.
-        </div>
-        <div class="tip-card">
-          <strong>🏷️ Ofertas 2x1 y 3x2:</strong>
-          Suma el peso total de los paquetes incluidos en la promo y pon el precio final total para ver si de verdad conviene.
-        </div>
-      </div>
-    </section>
-
-    <!-- Botones de Acción Inferiores -->
-    <div class="bottom-actions">
-      <button class="btn-action btn-action-primary" onclick="calculateWinner(true)">
-        <i class="fa-solid fa-calculator"></i> Calcular y Revelar Ganador
-      </button>
-      <button class="btn-action btn-action-secondary" onclick="shareComparison()">
-        <i class="fa-solid fa-share-nodes"></i> Compartir / Copiar Resumen
-      </button>
-      <button class="btn-action btn-action-secondary" onclick="resetCalculator()">
-        <i class="fa-solid fa-rotate-left"></i> Limpiar Todo
-      </button>
-    </div>
   </div>
 
   <!-- Modal de Ejemplos Típicos -->
@@ -1586,8 +1547,10 @@
     // Cambiar Unidad Base (Libras o Kilos)
     function setBaseUnit(unit) {
       appState.baseUnit = unit;
-      document.getElementById('btnBaseLbs').classList.toggle('active', unit === 'lb');
-      document.getElementById('btnBaseKgs').classList.toggle('active', unit === 'kg');
+      const btnLbs = document.getElementById('btnBaseLbs');
+      const btnKgs = document.getElementById('btnBaseKgs');
+      if (btnLbs) btnLbs.classList.toggle('active', unit === 'lb');
+      if (btnKgs) btnKgs.classList.toggle('active', unit === 'kg');
       renderProducts();
       calculateWinner(false);
       showToast(`Comparando precios en ${unit === 'lb' ? 'Libras (lb)' : 'Kilos (kg)'}`);
@@ -1595,7 +1558,8 @@
 
     // Cambiar Símbolo de Moneda
     function updateCurrency() {
-      appState.currency = document.getElementById('currencySelect').value;
+      const currSelect = document.getElementById('currencySelect');
+      if (currSelect) appState.currency = currSelect.value;
       renderProducts();
       calculateWinner(false);
     }
@@ -1606,6 +1570,20 @@
       grid.innerHTML = '';
 
       appState.products.forEach((prod, index) => {
+        // Separador centrado en mayúsculas antes del segundo producto y siguientes
+        if (index > 0) {
+          const divider = document.createElement('div');
+          divider.className = 'compare-section-divider';
+          divider.innerHTML = `
+            <div class="divider-line"></div>
+            <div class="divider-text">
+              <i class="fa-solid fa-code-compare"></i> COMPARAR CON PRODUCTO ${index > 1 ? (index + 1) : ''}
+            </div>
+            <div class="divider-line"></div>
+          `;
+          grid.appendChild(divider);
+        }
+
         const card = document.createElement('div');
         card.className = 'product-card';
         card.id = `product-card-${prod.id}`;
@@ -1630,8 +1608,8 @@
               <button type="button" class="btn-action-icon btn-camera" title="Tomar foto del producto con la cámara" onclick="triggerCamera(${prod.id})">
                 <i class="fa-solid fa-camera"></i>
               </button>
-              <button type="button" class="btn-action-icon btn-clear-card" title="Borrar y limpiar datos de este producto" onclick="clearProductCard(${prod.id})">
-                <i class="fa-solid fa-trash-can"></i>
+              <button type="button" class="btn-action-icon btn-eraser" title="Borrar nombre del producto" onclick="clearProductName(${prod.id})">
+                <i class="fa-solid fa-eraser"></i>
               </button>
               ${appState.products.length > 2 ? `
                 <button type="button" class="btn-action-icon btn-remove-option" title="Eliminar opción" onclick="removeProduct(${prod.id})">
@@ -1814,22 +1792,17 @@
       }
     }
 
-    // Borrar y limpiar rápidamente datos de un producto (Tacho de basura)
-    function clearProductCard(id) {
+    // Borrar rápidamente solo el nombre del producto (icono de borrador)
+    function clearProductName(id) {
       const prod = appState.products.find(p => p.id === id);
       if (prod) {
         prod.name = '';
-        prod.price = '';
-        prod.quantity = '';
-        prod.photo = null;
         renderProducts();
-        calculateWinner(false);
-        // Poner foco en el campo para escribir de inmediato
         setTimeout(() => {
           const input = document.getElementById(`prod-name-input-${id}`);
           if (input) input.focus();
-        }, 80);
-        showToast('🗑️ Producto limpiado. Listo para escribir uno nuevo');
+        }, 60);
+        showToast('✏️ Nombre borrado. Listo para escribir');
       }
     }
 
