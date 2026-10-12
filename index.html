@@ -117,15 +117,13 @@
 
     .app-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #0f172a;
+      font-size: 2.15rem;
+      font-weight: 900;
       line-height: 1.15;
       margin-bottom: 8px;
-    }
-
-    .app-title span {
-      background: linear-gradient(135deg, #059669, #f59e0b);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #059669 0%, #10b981 45%, #f59e0b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -135,6 +133,45 @@
       color: #64748b;
       max-width: 580px;
       margin: 0 auto 16px auto;
+    }
+
+    /* Footer con Versión y Autor */
+    .app-footer {
+      text-align: center;
+      margin-top: 36px;
+      padding-top: 22px;
+      border-top: 1.5px dashed #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-badge {
+      display: inline-block;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 14px;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-author {
+      font-size: 0.95rem;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .footer-author strong {
+      color: #059669;
+      font-weight: 800;
+    }
+
+    .footer-subtitle {
+      font-size: 0.78rem;
+      color: #94a3b8;
     }
 
     /* Config Bar (Pestañas de Comparación: Libras vs Kilos) */
@@ -1274,7 +1311,7 @@
       <div class="logo-badge">
         <i class="fa-solid fa-scale-balanced"></i> Defiende Tu Bolsillo
       </div>
-      <h1 class="app-title">Calculadora de <span>Ofertas Reales</span></h1>
+      <h1 class="app-title">CALCULADORA DE OFERTAS REALES</h1>
       <p class="app-subtitle">
         ¡No caigas en las trampas del mercado! Compara el precio real por libra o kilo entre 2 o más presentaciones y descubre cuál te conviene de verdad.
       </p>
@@ -1393,6 +1430,13 @@
         <!-- Renderizado dinámico de barras -->
       </div>
     </div>
+
+    <!-- Footer con Versión y Autor -->
+    <footer class="app-footer">
+      <div class="footer-badge">v1.1.6</div>
+      <p class="footer-author">Creado by <strong>Xavier Chasipanta</strong></p>
+      <p class="footer-subtitle">Defiende Tu Bolsillo • Calculadora de Ofertas de Mercado</p>
+    </footer>
   </div>
 
   <!-- Modal de Ejemplos Típicos -->
