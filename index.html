@@ -1092,6 +1092,18 @@
       transform: scale(1.08);
     }
 
+    .btn-gallery {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .btn-gallery:hover {
+      background: #059669;
+      color: white;
+      transform: scale(1.08);
+    }
+
     .btn-eraser {
       background: #faf5ff;
       color: #9333ea;
@@ -1115,6 +1127,193 @@
       background: #64748b;
       color: white;
       transform: scale(1.08);
+    }
+
+    /* Campo Supermercado / Lugar */
+    .store-field-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .store-field-icon {
+      position: absolute;
+      left: 12px;
+      color: #059669;
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .input-store {
+      width: 100%;
+      padding: 10px 14px 10px 34px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #1e293b;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-store:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Botón Píldora de Sesiones Guardadas */
+    .btn-sessions-pill {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .btn-sessions-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+    }
+
+    /* Tarjetas de Sesión de Comparación */
+    .session-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .session-card:hover {
+      border-color: #7c3aed;
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.12);
+    }
+
+    .session-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .session-card-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.3;
+    }
+
+    .session-card-date {
+      font-size: 0.74rem;
+      color: #94a3b8;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .session-items-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0;
+    }
+
+    .session-item-badge {
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .session-item-badge.is-winner-badge {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #86efac;
+      font-weight: 700;
+    }
+
+    .session-photos-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .session-mini-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .session-card-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .btn-open-session {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-open-session:hover {
+      background: #5b21b6;
+      transform: translateY(-1px);
+    }
+
+    .btn-delete-session {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      padding: 7px 10px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-delete-session:hover {
+      background: #ef4444;
+      color: white;
     }
 
     /* Separador centrado entre productos a comparar */
@@ -1319,8 +1518,11 @@
         <button id="btnInstallPWA" class="btn-install-pwa" onclick="installPWA()">
           <i class="fa-solid fa-cloud-arrow-down"></i> Instalar como App (PWA)
         </button>
+        <button class="btn-sessions-pill" onclick="openSessionsModal()">
+          <i class="fa-solid fa-folder-open"></i> Comparaciones Guardadas (<span id="sessionsBadgeCount">0</span>)
+        </button>
         <button class="btn-history-pill" onclick="openHistoryModal()">
-          <i class="fa-solid fa-camera-retro"></i> Mis Ofertas Guardadas (<span id="historyBadgeCount">0</span>)
+          <i class="fa-solid fa-camera-retro"></i> Fotos de Ofertas (<span id="historyBadgeCount">0</span>)
         </button>
       </div>
     </header>
@@ -1376,6 +1578,21 @@
       </div>
     </div>
 
+    <!-- Lista de Sugerencias de Supermercados Populares -->
+    <datalist id="popularStores">
+      <option value="Supermaxi"></option>
+      <option value="Megamaxi"></option>
+      <option value="Mi Comisariato"></option>
+      <option value="Tía"></option>
+      <option value="Gran Akí"></option>
+      <option value="Super Akí"></option>
+      <option value="Santa María"></option>
+      <option value="Coral Hipermercados"></option>
+      <option value="Mercado Central / Municipal"></option>
+      <option value="Tienda de Barrio"></option>
+      <option value="Feria Libre"></option>
+    </datalist>
+
     <!-- 1. Tarjetas de Productos (Aparecen de primero para ingresar datos rápido) -->
     <div class="products-grid" id="productsGrid">
       <!-- Los productos se generan dinámicamente con JS -->
@@ -1385,6 +1602,9 @@
     <div class="bottom-actions" style="margin-top: 0px; margin-bottom: 24px;">
       <button class="btn-action btn-action-primary" onclick="calculateWinner(true)">
         <i class="fa-solid fa-calculator"></i> Comparar y Ver Mejor Precio
+      </button>
+      <button class="btn-action" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white;" onclick="saveCurrentSession()">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar Comparación Completa
       </button>
       <button class="btn-action btn-action-secondary" onclick="shareComparison()">
         <i class="fa-solid fa-share-nodes"></i> Compartir
@@ -1433,7 +1653,7 @@
 
     <!-- Footer con Versión y Autor -->
     <footer class="app-footer">
-      <div class="footer-badge">v1.1.6</div>
+      <div class="footer-badge">v1.1.7</div>
       <p class="footer-author">Creado by <strong>Xavier Chasipanta</strong></p>
       <p class="footer-subtitle">Defiende Tu Bolsillo • Calculadora de Ofertas de Mercado</p>
     </footer>
@@ -1472,6 +1692,37 @@
       <div class="preset-item" onclick="loadPreset('tres_productos')">
         <strong style="display: block; color: #0f172a;">🥩 Caso 3 Opciones: Pollo por Libra vs Kilo vs Paquete Promo</strong>
         <span style="font-size: 0.8rem; color: #64748b;">Comparación rápida de tres opciones simultáneas.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Comparaciones Guardadas (Sesiones Completas) -->
+  <div class="modal-overlay" id="sessionsModal" onclick="closeSessionsModal(event)">
+    <div class="modal-card" style="max-height: 88vh; display: flex; flex-direction: column;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-shrink: 0;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; color: #0f172a;">
+          <i class="fa-solid fa-folder-open" style="color: #7c3aed;"></i> Comparaciones Guardadas
+        </h3>
+        <button onclick="closeSessionsModal()" style="border: none; background: transparent; font-size: 1.2rem; cursor: pointer; color: #64748b;">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px; flex-shrink: 0;">
+        Tus sesiones de compras completas guardadas en distintos supermercados. ¡Toca <strong>Cargar</strong> para volver a ver y editar cualquiera de ellas!
+      </p>
+
+      <div id="savedSessionsList" style="overflow-y: auto; flex: 1; padding-right: 4px;">
+        <!-- Lista dinámica de comparaciones guardadas -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; pt-2 border-top: 1px solid #e2e8f0; flex-shrink: 0; gap: 8px;">
+        <button onclick="clearAllSessions()" style="background: #fee2e2; border: none; color: #ef4444; padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-trash"></i> Borrar Todas
+        </button>
+        <button onclick="saveCurrentSession()" style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">
+          <i class="fa-solid fa-plus"></i> Guardar Actual
+        </button>
       </div>
     </div>
   </div>
@@ -1575,8 +1826,8 @@
       baseUnit: 'lb', // 'lb' o 'kg'
       currency: '$',
       products: [
-        { id: 1, name: 'Café Buen Día (Presentación 1)', price: '', quantity: '', unit: 'g', multiUnits: 1 },
-        { id: 2, name: 'Café Buen Día (Presentación 2)', price: '', quantity: '', unit: 'lb', multiUnits: 1 }
+        { id: 1, name: 'Café Buen Día (Presentación 1)', store: '', price: '', quantity: '', unit: 'g', multiUnits: 1 },
+        { id: 2, name: 'Café Buen Día (Presentación 2)', store: '', price: '', quantity: '', unit: 'lb', multiUnits: 1 }
       ]
     };
 
@@ -1585,6 +1836,7 @@
       renderProducts();
       calculateWinner(false);
       updateHistoryBadge();
+      updateSessionsBadge();
       startTipsCarousel();
     });
 
@@ -1649,8 +1901,11 @@
                      oninput="updateProductName(${prod.id}, this.value)" />
             </div>
             <div class="card-top-actions">
-              <button type="button" class="btn-action-icon btn-camera" title="Tomar foto del producto con la cámara" onclick="triggerCamera(${prod.id})">
+              <button type="button" class="btn-action-icon btn-camera" title="Tomar foto con la cámara" onclick="triggerCamera(${prod.id})">
                 <i class="fa-solid fa-camera"></i>
+              </button>
+              <button type="button" class="btn-action-icon btn-gallery" title="Subir foto desde la galería" onclick="triggerGallery(${prod.id})">
+                <i class="fa-solid fa-images"></i>
               </button>
               <button type="button" class="btn-action-icon btn-eraser" title="Borrar nombre del producto" onclick="clearProductName(${prod.id})">
                 <i class="fa-solid fa-eraser"></i>
@@ -1661,11 +1916,13 @@
                 </button>
               ` : ''}
             </div>
-            <!-- Input de archivo para cámara en celular -->
+            <!-- Input para tomar foto con la cámara -->
             <input type="file" id="camera-file-${prod.id}" accept="image/*" capture="environment" style="display:none;" onchange="handleProductPhoto(${prod.id}, this)">
+            <!-- Input para subir foto desde la galería -->
+            <input type="file" id="gallery-file-${prod.id}" accept="image/*" style="display:none;" onchange="handleProductPhoto(${prod.id}, this)">
           </div>
 
-          <!-- Si el producto tiene foto tomada, mostrar miniatura -->
+          <!-- Si el producto tiene foto tomada o subida, mostrar miniatura -->
           ${prod.photo ? `
             <div class="product-photo-box">
               <img src="${prod.photo}" class="product-photo-img" onclick="previewImageFull('${prod.photo}', '${prod.name || 'Producto'}')" title="Toca para ver foto en grande" />
@@ -1674,6 +1931,20 @@
               </button>
             </div>
           ` : ''}
+
+          <!-- Casillero para indicar en qué supermercado o tienda se vio -->
+          <div class="field-group">
+            <label class="field-label">
+              <i class="fa-solid fa-store"></i> Supermercado o Lugar
+            </label>
+            <div class="store-field-wrapper">
+              <i class="fa-solid fa-shop store-field-icon"></i>
+              <input type="text" class="input-store" list="popularStores"
+                     value="${prod.store || ''}" 
+                     placeholder="Ej: Supermaxi, Tía, Mi Comisariato..." 
+                     oninput="updateProductField(${prod.id}, 'store', this.value)" />
+            </div>
+          </div>
 
           <div class="field-group">
             <label class="field-label">
@@ -1756,6 +2027,7 @@
       appState.products.push({
         id: newId,
         name: `Presentación ${count}`,
+        store: '',
         price: '',
         quantity: '',
         unit: appState.baseUnit,
@@ -1780,6 +2052,12 @@
     // Disparar input de cámara
     function triggerCamera(id) {
       const fileInput = document.getElementById(`camera-file-${id}`);
+      if (fileInput) fileInput.click();
+    }
+
+    // Disparar input de galería
+    function triggerGallery(id) {
+      const fileInput = document.getElementById(`gallery-file-${id}`);
       if (fileInput) fileInput.click();
     }
 
@@ -2000,11 +2278,194 @@
       if (val) {
         localStorage.setItem('firebase_config_mercado', val);
         showToast('☁️ Configuración de Firebase guardada con éxito');
-      } else {
-        localStorage.removeItem('firebase_config_mercado');
-        showToast('Configuración eliminada (usando almacenamiento local)');
       }
       toggleFirebaseConfigModal();
+    }
+
+    // ==========================================
+    // Gestión de Sesiones Completas de Comparación
+    // ==========================================
+    function getSavedSessions() {
+      try {
+        return JSON.parse(localStorage.getItem('sesiones_comparacion_guardadas')) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function updateSessionsBadge() {
+      const count = getSavedSessions().length;
+      const badge = document.getElementById('sessionsBadgeCount');
+      if (badge) badge.textContent = count;
+    }
+
+    function saveCurrentSession() {
+      const validProds = appState.products.filter(p => parseFloat(p.price) > 0 && parseFloat(p.quantity) > 0);
+      if (validProds.length < 1) {
+        showToast('⚠️ Ingresa al menos un producto con precio y peso antes de guardar la sesión');
+        return;
+      }
+
+      // Generar título descriptivo automático con tiendas y productos
+      const namesList = appState.products
+        .map(p => {
+          let str = p.name.trim() || 'Producto';
+          if (p.store && p.store.trim()) str += ` (${p.store.trim()})`;
+          return str;
+        })
+        .join(' vs ');
+
+      const defaultTitle = namesList.length > 55 ? namesList.substring(0, 52) + '...' : namesList;
+      const userTitle = prompt('Ponle un nombre o nota a esta comparación (ej. Arroz: Supermaxi vs Tía):', defaultTitle);
+      if (userTitle === null) return; // Cancelado por el usuario
+
+      const session = {
+        id: Date.now(),
+        title: (userTitle && userTitle.trim()) ? userTitle.trim() : defaultTitle,
+        date: new Date().toLocaleDateString('es-ES', { 
+          day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+        }),
+        baseUnit: appState.baseUnit,
+        currency: appState.currency,
+        products: JSON.parse(JSON.stringify(appState.products))
+      };
+
+      const sessions = getSavedSessions();
+      sessions.unshift(session);
+      localStorage.setItem('sesiones_comparacion_guardadas', JSON.stringify(sessions));
+      updateSessionsBadge();
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.65 } });
+      }
+
+      showToast('💾 ¡Comparación completa guardada con éxito!');
+    }
+
+    function openSessionsModal() {
+      const sessions = getSavedSessions();
+      const listEl = document.getElementById('savedSessionsList');
+      if (!listEl) return;
+
+      if (sessions.length === 0) {
+        listEl.innerHTML = `
+          <div style="text-align: center; padding: 30px 10px; color: #94a3b8;">
+            <i class="fa-solid fa-folder-open" style="font-size: 2.6rem; margin-bottom: 10px; color: #cbd5e1;"></i>
+            <p style="font-size: 0.95rem; font-weight: 700; color: #475569;">No tienes comparaciones guardadas aún</p>
+            <p style="font-size: 0.8rem; margin-top: 5px; color: #64748b; line-height: 1.4;">
+              Compara precios de un producto en varios supermercados (ej. Supermaxi vs Tía), fotos y pesos, y pulsa <strong>"Guardar Comparación Completa"</strong> para revisarlas en casa.
+            </p>
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = '';
+        sessions.forEach(sess => {
+          const card = document.createElement('div');
+          card.className = 'session-card';
+
+          // Fotos en miniatura de los productos que componen la sesión
+          const photos = sess.products.filter(p => p.photo);
+          const photosHtml = photos.length > 0 ? `
+            <div class="session-photos-strip">
+              ${photos.map(p => `
+                <img src="${p.photo}" class="session-mini-thumb" onclick="previewImageFull('${p.photo}', '${p.name || 'Producto'}')" title="${p.name || ''}" />
+              `).join('')}
+            </div>
+          ` : '';
+
+          // Badges de cada producto con su supermercado y precio
+          const badgesHtml = sess.products.map(p => {
+            let label = p.name || 'Producto';
+            let storeText = p.store ? `📍${p.store}` : '';
+            let priceText = p.price ? `${sess.currency || '$'}${p.price}` : '';
+            return `
+              <span class="session-item-badge">
+                <strong>${label}</strong> ${storeText} ${priceText ? `• ${priceText}` : ''}
+              </span>
+            `;
+          }).join('');
+
+          card.innerHTML = `
+            <div class="session-card-header">
+              <div>
+                <div class="session-card-title">${sess.title}</div>
+                <div class="session-card-date">
+                  <i class="fa-regular fa-clock"></i> ${sess.date} • Base: ${sess.baseUnit === 'kg' ? 'Kilos (kg)' : 'Libras (lb)'}
+                </div>
+              </div>
+            </div>
+
+            <div class="session-items-preview">
+              ${badgesHtml}
+            </div>
+
+            ${photosHtml}
+
+            <div class="session-card-actions">
+              <span style="font-size: 0.78rem; font-weight: 700; color: #6d28d9;">
+                <i class="fa-solid fa-list-check"></i> ${sess.products.length} opciones guardadas
+              </span>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-delete-session" onclick="deleteSession(${sess.id})" title="Borrar esta comparación">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+                <button class="btn-open-session" onclick="loadSession(${sess.id})" title="Cargar esta comparación a la pantalla">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Cargar / Abrir
+                </button>
+              </div>
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+      }
+
+      document.getElementById('sessionsModal').classList.add('open');
+    }
+
+    function closeSessionsModal(e) {
+      document.getElementById('sessionsModal').classList.remove('open');
+    }
+
+    function loadSession(sessionId) {
+      const sessions = getSavedSessions();
+      const sess = sessions.find(s => s.id === sessionId);
+      if (!sess) return;
+
+      // Cargar productos y unidad base guardada
+      appState.products = JSON.parse(JSON.stringify(sess.products));
+      if (sess.baseUnit) appState.baseUnit = sess.baseUnit;
+      if (sess.currency) appState.currency = sess.currency;
+
+      const btnLbs = document.getElementById('btnBaseLbs');
+      const btnKgs = document.getElementById('btnBaseKgs');
+      if (btnLbs) btnLbs.classList.toggle('active', appState.baseUnit === 'lb');
+      if (btnKgs) btnKgs.classList.toggle('active', appState.baseUnit === 'kg');
+
+      renderProducts();
+      calculateWinner(true);
+      closeSessionsModal();
+      showToast(`📂 ¡Comparación "${sess.title}" cargada con éxito!`);
+      
+      // Desplazar suavemente a los productos
+      const grid = document.getElementById('productsGrid');
+      if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function deleteSession(sessionId) {
+      let sessions = getSavedSessions().filter(s => s.id !== sessionId);
+      localStorage.setItem('sesiones_comparacion_guardadas', JSON.stringify(sessions));
+      updateSessionsBadge();
+      openSessionsModal();
+      showToast('Comparación eliminada');
+    }
+
+    function clearAllSessions() {
+      if (confirm('¿Deseas eliminar todas las comparaciones completas guardadas?')) {
+        localStorage.removeItem('sesiones_comparacion_guardadas');
+        updateSessionsBadge();
+        openSessionsModal();
+        showToast('Todas las comparaciones han sido eliminadas');
+      }
     }
 
     // ==========================================
@@ -2242,6 +2703,8 @@
       appState.products.forEach(p => {
         p.price = '';
         p.quantity = '';
+        p.store = '';
+        p.photo = null;
       });
       renderProducts();
       calculateWinner(false);
