@@ -475,30 +475,105 @@
       border-color: var(--primary);
     }
 
-    /* Multipack toggle mini */
-    .multipack-toggle {
+    /* Multipack / Combo Adaptable (Packs de Atunes, Leches, Jugos, etc.) */
+    .pack-toggle-row {
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+    .pack-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: #047857;
+      background: #ecfdf5;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #a7f3d0;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .pack-checkbox-label:hover {
+      background: #d1fae5;
+      border-color: #34d399;
+    }
+
+    .pack-checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: #059669;
+      cursor: pointer;
+    }
+
+    .pack-inputs-box {
+      background: #f0fdf4;
+      border: 1.5px dashed #34d399;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .pack-input-label {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #065f46;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .input-pack-units {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #065f46;
+      border: 1.5px solid #86efac;
+      border-radius: 10px;
+      background: white;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-pack-units:focus {
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .pack-summary-pill {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.8rem;
-      color: #64748b;
-      cursor: pointer;
-      user-select: none;
-      margin-top: -4px;
     }
 
-    .multipack-inputs {
-      display: none;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: #f1f5f9;
-      padding: 10px;
-      border-radius: 10px;
+    .pack-unit-price-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      padding: 5px 12px;
+      border-radius: 20px;
       font-size: 0.85rem;
-    }
-
-    .multipack-inputs.show {
-      display: grid;
+      font-weight: 800;
+      margin-bottom: 8px;
     }
 
     /* Card Unit Result */
@@ -1800,7 +1875,7 @@
 
     <!-- Footer con Versión y Autor -->
     <footer class="app-footer">
-      <div class="footer-badge">v1.1.9</div>
+      <div class="footer-badge">v1.2.0</div>
       <p class="footer-author">Creado by <strong>Xavier Chasipanta</strong></p>
       <p class="footer-subtitle">Defiende Tu Bolsillo • Calculadora de Ofertas de Mercado</p>
     </footer>
@@ -1820,6 +1895,11 @@
       <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 16px;">
         Haz clic en cualquiera de estos casos reales para cargar los datos automáticamente:
       </p>
+
+      <div class="preset-item" onclick="loadPreset('pack_combo')">
+        <strong style="display: block; color: #0f172a;">🐟 Caso Pack / Combo: Atún Pack x3 (140g c/u a $3.75) vs Lata 354g ($2.90)</strong>
+        <span style="font-size: 0.8rem; color: #64748b;">Compara combos de varias unidades (atunes, leches, jugos) vs unidades individuales.</span>
+      </div>
 
       <div class="preset-item" onclick="loadPreset('arroz')">
         <strong style="display: block; color: #0f172a;">🌾 Caso Arroz: ¿Bolsa de 5 lbs vs 1 Kilo vs Paquete 450g?</strong>
@@ -2016,8 +2096,8 @@
       baseUnit: 'lb', // 'lb' o 'kg'
       currency: '$',
       products: [
-        { id: 1, name: 'Café Buen Día (Presentación 1)', store: '', price: '', quantity: '', unit: 'g', multiUnits: 1 },
-        { id: 2, name: 'Café Buen Día (Presentación 2)', store: '', price: '', quantity: '', unit: 'lb', multiUnits: 1 }
+        { id: 1, name: 'Café Buen Día (Presentación 1)', store: '', price: '', quantity: '', unit: 'g', isPack: false, packUnits: 1 },
+        { id: 2, name: 'Café Buen Día (Presentación 2)', store: '', price: '', quantity: '', unit: 'lb', isPack: false, packUnits: 1 }
       ]
     };
 
@@ -2145,28 +2225,74 @@
             </div>
           </div>
 
-          <div class="field-group">
-            <label class="field-label">
-              <i class="fa-solid fa-weight-scale"></i> Peso o cantidad del empaque
+          <!-- Opción adaptable: ¿Viene en Pack / Combo? -->
+          <div class="pack-toggle-row">
+            <label class="pack-checkbox-label">
+              <input type="checkbox" class="pack-checkbox" ${prod.isPack ? 'checked' : ''} onchange="toggleProductPack(${prod.id}, this.checked)">
+              <span><i class="fa-solid fa-boxes-stacked"></i> ¿Viene en Pack / Combo? <small>(ej. 3 atunes, 6 leches, etc.)</small></span>
             </label>
-            <div class="weight-row">
-              <input type="number" step="0.01" min="0" class="input-quantity" 
-                     value="${prod.quantity !== '' ? prod.quantity : ''}" 
-                     placeholder="Ej: 500" 
-                     oninput="updateProductField(${prod.id}, 'quantity', this.value)" />
-              <select class="unit-selector" onchange="updateProductField(${prod.id}, 'unit', this.value)">
-                <option value="lb" ${prod.unit === 'lb' ? 'selected' : ''}>Libras (lb)</option>
-                <option value="kg" ${prod.unit === 'kg' ? 'selected' : ''}>Kilos (kg)</option>
-                <option value="g" ${prod.unit === 'g' ? 'selected' : ''}>Gramos (g)</option>
-                <option value="oz" ${prod.unit === 'oz' ? 'selected' : ''}>Onzas (oz)</option>
-                <option value="l" ${prod.unit === 'l' ? 'selected' : ''}>Litros (L)</option>
-                <option value="ml" ${prod.unit === 'ml' ? 'selected' : ''}>Mililitros (ml)</option>
-                <option value="un" ${prod.unit === 'un' ? 'selected' : ''}>Unidades (piezas)</option>
-              </select>
-            </div>
           </div>
 
+          ${prod.isPack ? `
+            <div class="pack-inputs-box">
+              <div>
+                <label class="pack-input-label">
+                  <i class="fa-solid fa-layer-group"></i> ¿Cuántas unidades vienen en el pack?
+                </label>
+                <input type="number" min="2" step="1" class="input-pack-units" 
+                       value="${prod.packUnits || 3}" 
+                       placeholder="Ej: 3, 6, 12..." 
+                       oninput="updateProductField(${prod.id}, 'packUnits', this.value)" />
+              </div>
+              <div>
+                <label class="pack-input-label">
+                  <i class="fa-solid fa-scale-balanced"></i> Contenido / peso de CADA unidad:
+                </label>
+                <div class="weight-row">
+                  <input type="number" step="0.01" min="0" class="input-quantity" 
+                         value="${prod.quantity !== '' ? prod.quantity : ''}" 
+                         placeholder="Ej: 140" 
+                         oninput="updateProductField(${prod.id}, 'quantity', this.value)" />
+                  <select class="unit-selector" onchange="updateProductField(${prod.id}, 'unit', this.value)">
+                    <option value="g" ${prod.unit === 'g' ? 'selected' : ''}>Gramos (g)</option>
+                    <option value="ml" ${prod.unit === 'ml' ? 'selected' : ''}>Mililitros (ml)</option>
+                    <option value="lb" ${prod.unit === 'lb' ? 'selected' : ''}>Libras (lb)</option>
+                    <option value="kg" ${prod.unit === 'kg' ? 'selected' : ''}>Kilos (kg)</option>
+                    <option value="l" ${prod.unit === 'l' ? 'selected' : ''}>Litros (L)</option>
+                    <option value="oz" ${prod.unit === 'oz' ? 'selected' : ''}>Onzas (oz)</option>
+                    <option value="un" ${prod.unit === 'un' ? 'selected' : ''}>Unidades (piezas)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="pack-summary-pill">
+                <i class="fa-solid fa-calculator"></i> Total en el pack: <strong>${(((prod.packUnits || 1) * (parseFloat(prod.quantity) || 0))).toFixed(1).replace(/\.0$/, '')} ${prod.unit}</strong> (en ${prod.packUnits || 1} unidades)
+              </div>
+            </div>
+          ` : `
+            <div class="field-group">
+              <label class="field-label">
+                <i class="fa-solid fa-weight-scale"></i> Peso o cantidad del empaque
+              </label>
+              <div class="weight-row">
+                <input type="number" step="0.01" min="0" class="input-quantity" 
+                       value="${prod.quantity !== '' ? prod.quantity : ''}" 
+                       placeholder="Ej: 500" 
+                       oninput="updateProductField(${prod.id}, 'quantity', this.value)" />
+                <select class="unit-selector" onchange="updateProductField(${prod.id}, 'unit', this.value)">
+                  <option value="lb" ${prod.unit === 'lb' ? 'selected' : ''}>Libras (lb)</option>
+                  <option value="kg" ${prod.unit === 'kg' ? 'selected' : ''}>Kilos (kg)</option>
+                  <option value="g" ${prod.unit === 'g' ? 'selected' : ''}>Gramos (g)</option>
+                  <option value="oz" ${prod.unit === 'oz' ? 'selected' : ''}>Onzas (oz)</option>
+                  <option value="l" ${prod.unit === 'l' ? 'selected' : ''}>Litros (L)</option>
+                  <option value="ml" ${prod.unit === 'ml' ? 'selected' : ''}>Mililitros (ml)</option>
+                  <option value="un" ${prod.unit === 'un' ? 'selected' : ''}>Unidades (piezas)</option>
+                </select>
+              </div>
+            </div>
+          `}
+
           <div class="card-result-box" id="calc-box-${prod.id}">
+            <div id="pack-badge-${prod.id}"></div>
             <div class="result-unit-label" id="unit-label-display-${prod.id}">Costo por ${prod.unit === 'un' ? 'Unidad' : (appState.baseUnit === 'lb' ? 'Libra' : 'Kilo')}</div>
             <div class="result-unit-price" id="unit-price-display-${prod.id}">- - -</div>
             <div class="result-secondary-calc" id="secondary-price-display-${prod.id}">Ingresa precio y peso</div>
@@ -2192,6 +2318,19 @@
       grid.appendChild(addCard);
     }
 
+    // Alternar modo Pack / Combo
+    function toggleProductPack(id, isChecked) {
+      const prod = appState.products.find(p => p.id === id);
+      if (prod) {
+        prod.isPack = isChecked;
+        if (isChecked && (!prod.packUnits || prod.packUnits < 2)) {
+          prod.packUnits = 3;
+        }
+        renderProducts();
+        calculateWinner(false);
+      }
+    }
+
     // Actualizar datos del producto
     function updateProductName(id, val) {
       const prod = appState.products.find(p => p.id === id);
@@ -2201,7 +2340,13 @@
     function updateProductField(id, field, val) {
       const prod = appState.products.find(p => p.id === id);
       if (prod) {
-        prod[field] = (field === 'price' || field === 'quantity') ? (val === '' ? '' : parseFloat(val)) : val;
+        if (field === 'price' || field === 'quantity') {
+          prod[field] = val === '' ? '' : parseFloat(val);
+        } else if (field === 'packUnits') {
+          prod[field] = val === '' ? '' : parseInt(val) || 1;
+        } else {
+          prod[field] = val;
+        }
         calculateWinner(false);
       }
     }
@@ -2217,7 +2362,8 @@
         price: '',
         quantity: '',
         unit: appState.baseUnit,
-        multiUnits: 1
+        isPack: false,
+        packUnits: 1
       });
       renderProducts();
       calculateWinner(false);
@@ -2345,8 +2491,12 @@
         return;
       }
 
-      const totalLb = qty * (CONVERSIONS_TO_LB[prod.unit] || 1);
-      const totalKg = qty * (CONVERSIONS_TO_KG[prod.unit] || 1);
+      const isPack = !!prod.isPack;
+      const packCount = (isPack && prod.packUnits > 1) ? parseInt(prod.packUnits) : 1;
+      const effectiveQty = qty * packCount;
+
+      const totalLb = effectiveQty * (CONVERSIONS_TO_LB[prod.unit] || 1);
+      const totalKg = effectiveQty * (CONVERSIONS_TO_KG[prod.unit] || 1);
       const pricePerLb = (price / totalLb).toFixed(3);
       const pricePerKg = (price / totalKg).toFixed(3);
 
@@ -2357,6 +2507,9 @@
         price: price.toFixed(2),
         quantity: qty,
         unit: prod.unit,
+        isPack: isPack,
+        packUnits: packCount,
+        effectiveQty: effectiveQty,
         pricePerLb,
         pricePerKg,
         photo: prod.photo || null,
@@ -2416,10 +2569,20 @@
 
           // Si la unidad es "un" (unidades), mostrar costo por unidad (/un), de lo contrario en libras (/lb)
           const isUnits = item.unit === 'un';
+          const isPack = item.isPack && item.packUnits > 1;
+          const packCount = isPack ? parseInt(item.packUnits) : 1;
+          const effectiveQty = item.effectiveQty || (parseFloat(item.quantity || 1) * packCount);
+
           const unitPriceVal = isUnits
-            ? (parseFloat(item.price) / parseFloat(item.quantity || 1)).toFixed(3)
+            ? (parseFloat(item.price) / effectiveQty).toFixed(3)
             : item.pricePerLb;
           const unitLabelSuffix = isUnits ? 'unidad' : 'lb';
+
+          const packDetailHtml = isPack
+            ? `<div style="font-size: 0.78rem; color: #d97706; font-weight: 700; margin-top: 2px;">
+                 <i class="fa-solid fa-boxes-stacked"></i> Pack x${packCount} (${item.quantity} ${item.unit} c/u) • ${item.currency}${(parseFloat(item.price) / packCount).toFixed(2)} cada unidad
+               </div>`
+            : '';
 
           card.innerHTML = `
             <div class="saved-offer-main-row">
@@ -2434,8 +2597,9 @@
                 <div class="saved-offer-title">${item.name}</div>
                 ${item.store ? `<div class="saved-offer-store-tag"><i class="fa-solid fa-location-dot"></i> ${item.store}</div>` : ''}
                 <div class="saved-offer-price">
-                  ${item.currency}${item.price} (${item.quantity} ${item.unit}) ➔ <strong>${item.currency}${unitPriceVal}/${unitLabelSuffix}</strong>
+                  ${item.currency}${item.price} (${effectiveQty} ${item.unit}) ➔ <strong>${item.currency}${unitPriceVal}/${unitLabelSuffix}</strong>
                 </div>
+                ${packDetailHtml}
                 <div class="saved-offer-date"><i class="fa-regular fa-clock"></i> ${item.date}</div>
               </div>
             </div>
@@ -2477,7 +2641,8 @@
           quantity: parseFloat(item.quantity) || '',
           unit: item.unit || 'lb',
           photo: item.photo || null,
-          multiUnits: 1
+          isPack: !!item.isPack,
+          packUnits: item.packUnits || 1
         };
       } else {
         // Si tiene captura completa de los productos de esa sesión con al menos 2 productos con precio, restaurar todo
@@ -2490,7 +2655,7 @@
         } else {
           // Cargar la oferta directamente en el Producto 1
           if (appState.products.length === 0) {
-            appState.products.push({ id: 1, name: '', store: '', price: '', quantity: '', unit: 'lb', multiUnits: 1 });
+            appState.products.push({ id: 1, name: '', store: '', price: '', quantity: '', unit: 'lb', isPack: false, packUnits: 1 });
           }
           appState.products[0] = {
             id: appState.products[0].id || 1,
@@ -2500,7 +2665,8 @@
             quantity: parseFloat(item.quantity) || '',
             unit: item.unit || 'lb',
             photo: item.photo || null,
-            multiUnits: 1
+            isPack: !!item.isPack,
+            packUnits: item.packUnits || 1
           };
         }
       }
@@ -2813,6 +2979,7 @@
         const unitLabelEl = document.getElementById(`unit-label-display-${prod.id}`);
         const displayEl = document.getElementById(`unit-price-display-${prod.id}`);
         const secondaryEl = document.getElementById(`secondary-price-display-${prod.id}`);
+        const packBadgeEl = document.getElementById(`pack-badge-${prod.id}`);
 
         if (card) {
           card.classList.remove('is-winner', 'is-loser');
@@ -2825,10 +2992,23 @@
 
         const price = parseFloat(prod.price);
         const qty = parseFloat(prod.quantity);
+        const isPack = !!prod.isPack;
+        const packCount = (isPack && prod.packUnits > 1) ? parseInt(prod.packUnits) : 1;
+        const effectiveQty = qty * packCount;
 
         if (!isNaN(price) && price > 0 && !isNaN(qty) && qty > 0) {
-          let totalWeightInLb = qty * (CONVERSIONS_TO_LB[prod.unit] || 1);
-          let totalWeightInKg = qty * (CONVERSIONS_TO_KG[prod.unit] || 1);
+          // Si es un pack/combo, mostrar la chapa destacada con el costo de cada unidad individual
+          if (packBadgeEl) {
+            if (isPack && packCount > 1) {
+              const perUnitPrice = (price / packCount).toFixed(2);
+              packBadgeEl.innerHTML = `<div class="pack-unit-price-badge"><i class="fa-solid fa-tag"></i> <strong>${appState.currency}${perUnitPrice}</strong> cada unidad en el pack</div>`;
+            } else {
+              packBadgeEl.innerHTML = '';
+            }
+          }
+
+          let totalWeightInLb = effectiveQty * (CONVERSIONS_TO_LB[prod.unit] || 1);
+          let totalWeightInKg = effectiveQty * (CONVERSIONS_TO_KG[prod.unit] || 1);
 
           let pricePerLb = price / totalWeightInLb;
           let pricePerKg = price / totalWeightInKg;
@@ -2838,7 +3018,7 @@
           let unitFullName;
 
           if (isUnits) {
-            targetUnitPrice = price / qty;
+            targetUnitPrice = price / effectiveQty;
             unitShortLabel = 'unidad';
             unitFullName = 'unidad';
 
@@ -2846,7 +3026,11 @@
               displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / unidad`;
             }
             if (secondaryEl) {
-              secondaryEl.textContent = `(${qty} ${qty === 1 ? 'unidad' : 'unidades'} por ${appState.currency}${price.toFixed(2)})`;
+              if (isPack && packCount > 1) {
+                secondaryEl.innerHTML = `(${appState.currency}${(price / packCount).toFixed(2)} c/u • Total pack: ${effectiveQty} unidades por ${appState.currency}${price.toFixed(2)})`;
+              } else {
+                secondaryEl.textContent = `(${effectiveQty} ${effectiveQty === 1 ? 'unidad' : 'unidades'} por ${appState.currency}${price.toFixed(2)})`;
+              }
             }
           } else {
             targetUnitPrice = appState.baseUnit === 'lb' ? pricePerLb : pricePerKg;
@@ -2859,7 +3043,11 @@
               displayEl.textContent = `${appState.currency}${targetUnitPrice.toFixed(3)} / ${appState.baseUnit}`;
             }
             if (secondaryEl) {
-              secondaryEl.textContent = `(${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+              if (isPack && packCount > 1) {
+                secondaryEl.innerHTML = `(${appState.currency}${(price / packCount).toFixed(2)} c/u en pack • Total pack: ${effectiveQty.toFixed(1).replace(/\.0$/, '')} ${prod.unit} • ${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+              } else {
+                secondaryEl.textContent = `(${appState.currency}${secondaryUnitPrice.toFixed(3)} / ${secondaryUnitName})`;
+              }
             }
           }
 
@@ -2867,6 +3055,9 @@
             ...prod,
             price,
             qty,
+            isPack,
+            packCount,
+            effectiveQty,
             targetUnitPrice,
             pricePerLb,
             pricePerKg,
@@ -2875,6 +3066,7 @@
             elementCard: card
           });
         } else {
+          if (packBadgeEl) packBadgeEl.innerHTML = '';
           if (displayEl) displayEl.textContent = '- - -';
           if (secondaryEl) secondaryEl.textContent = isUnits ? 'Ingresa precio y cantidad de unidades' : 'Ingresa precio y peso';
         }
@@ -2904,7 +3096,9 @@
 
         // Mostrar Recomendación
         verdictContainer.classList.add('show');
-        document.getElementById('verdictWinnerName').textContent = `🏆 ¡${winner.name} es la Mejor Opción!`;
+        let winnerPackNote = (winner.isPack && winner.packUnits > 1) ? ` (Pack x${winner.packUnits})` : '';
+        let loserPackNote = (loser.isPack && loser.packUnits > 1) ? ` (Pack x${loser.packUnits})` : '';
+        document.getElementById('verdictWinnerName').textContent = `🏆 ¡${winner.name}${winnerPackNote} es la Mejor Opción!`;
         
         let unitText = winner.unitFullName || (appState.baseUnit === 'lb' ? 'libra' : 'kilo');
         let winnerShort = winner.unitShortLabel || appState.baseUnit;
@@ -2915,8 +3109,8 @@
         document.getElementById('verdictSavingsMoney').textContent = `${appState.currency}${diffUnit.toFixed(3)} menos por ${unitText}`;
 
         document.getElementById('verdictMessage').innerHTML = `
-          Comprando <strong>${winner.name}</strong> estás pagando <strong>${appState.currency}${winner.targetUnitPrice.toFixed(3)}</strong> por cada ${unitText}.
-          Es un <strong>${savingsPercent}% más económico</strong> que <strong>${loser.name}</strong> (${appState.currency}${loser.targetUnitPrice.toFixed(3)}/${loserShort}).
+          Comprando <strong>${winner.name}${winnerPackNote}</strong> estás pagando <strong>${appState.currency}${winner.targetUnitPrice.toFixed(3)}</strong> por cada ${unitText}.
+          Es un <strong>${savingsPercent}% más económico</strong> que <strong>${loser.name}${loserPackNote}</strong> (${appState.currency}${loser.targetUnitPrice.toFixed(3)}/${loserShort}).
         `;
 
         // Renderizar barras comparativas
@@ -2945,12 +3139,13 @@
         const percentWidth = Math.max(25, (p.targetUnitPrice / maxPrice) * 100);
         const isBest = idx === 0;
         const shortUnit = p.unitShortLabel || (p.unit === 'un' ? 'unidad' : appState.baseUnit);
+        const packNote = (p.isPack && p.packUnits > 1) ? ` (Pack x${p.packUnits})` : '';
 
         const row = document.createElement('div');
         row.className = 'bar-row';
         row.innerHTML = `
           <div class="bar-info">
-            <span>${isBest ? '👑 ' : ''}${p.name}</span>
+            <span>${isBest ? '👑 ' : ''}${p.name}${packNote}</span>
             <span>${appState.currency}${p.targetUnitPrice.toFixed(3)} / ${shortUnit}</span>
           </div>
           <div class="bar-track">
@@ -2965,35 +3160,43 @@
     function loadPreset(type) {
       closePresetsModal();
 
-      if (type === 'arroz') {
+      if (type === 'pack_combo') {
         appState.baseUnit = 'lb';
         document.getElementById('btnBaseLbs')?.classList.add('active');
         document.getElementById('btnBaseKgs')?.classList.remove('active');
         appState.products = [
-          { id: 1, name: 'Bolsa Chica (450g)', store: '', price: 0.85, quantity: 450, unit: 'g', multiUnits: 1 },
-          { id: 2, name: 'Bolsa Mediana (1 Kilo)', store: '', price: 1.70, quantity: 1, unit: 'kg', multiUnits: 1 },
-          { id: 3, name: 'Bolsa 5 Libras (Oferta)', store: '', price: 3.40, quantity: 5, unit: 'lb', multiUnits: 1 }
+          { id: 1, name: 'Pack Atún x3 unidades', store: 'Supermaxi', price: 3.75, quantity: 140, unit: 'g', isPack: true, packUnits: 3 },
+          { id: 2, name: 'Atún Lata Grande 354g', store: 'Tía', price: 2.90, quantity: 354, unit: 'g', isPack: false, packUnits: 1 }
+        ];
+      } else if (type === 'arroz') {
+        appState.baseUnit = 'lb';
+        document.getElementById('btnBaseLbs')?.classList.add('active');
+        document.getElementById('btnBaseKgs')?.classList.remove('active');
+        appState.products = [
+          { id: 1, name: 'Bolsa Chica (450g)', store: '', price: 0.85, quantity: 450, unit: 'g', isPack: false, packUnits: 1 },
+          { id: 2, name: 'Bolsa Mediana (1 Kilo)', store: '', price: 1.70, quantity: 1, unit: 'kg', isPack: false, packUnits: 1 },
+          { id: 3, name: 'Bolsa 5 Libras (Oferta)', store: '', price: 3.40, quantity: 5, unit: 'lb', isPack: false, packUnits: 1 }
         ];
       } else if (type === 'detergente') {
         appState.baseUnit = 'kg';
         document.getElementById('btnBaseLbs')?.classList.remove('active');
         document.getElementById('btnBaseKgs')?.classList.add('active');
         appState.products = [
-          { id: 1, name: 'Bolsa Mediana (850g)', store: '', price: 2.10, quantity: 850, unit: 'g', multiUnits: 1 },
-          { id: 2, name: 'Bolsa Gigante (2.5 Kilos)', store: '', price: 6.50, quantity: 2.5, unit: 'kg', multiUnits: 1 }
+          { id: 1, name: 'Bolsa Mediana (850g)', store: '', price: 2.10, quantity: 850, unit: 'g', isPack: false, packUnits: 1 },
+          { id: 2, name: 'Bolsa Gigante (2.5 Kilos)', store: '', price: 6.50, quantity: 2.5, unit: 'kg', isPack: false, packUnits: 1 }
         ];
       } else if (type === 'aceite') {
         appState.baseUnit = 'lb';
         appState.products = [
-          { id: 1, name: 'Botella 900 ml', store: '', price: 2.25, quantity: 900, unit: 'ml', multiUnits: 1 },
-          { id: 2, name: 'Galón 3.8 Litros', store: '', price: 8.90, quantity: 3.8, unit: 'l', multiUnits: 1 }
+          { id: 1, name: 'Botella 900 ml', store: '', price: 2.25, quantity: 900, unit: 'ml', isPack: false, packUnits: 1 },
+          { id: 2, name: 'Galón 3.8 Litros', store: '', price: 8.90, quantity: 3.8, unit: 'l', isPack: false, packUnits: 1 }
         ];
       } else if (type === 'tres_productos') {
         appState.baseUnit = 'lb';
         appState.products = [
-          { id: 1, name: 'Pollo Libra Suelta', store: '', price: 1.65, quantity: 1, unit: 'lb', multiUnits: 1 },
-          { id: 2, name: 'Bandeja Especial 1.2 kg', store: '', price: 4.10, quantity: 1.2, unit: 'kg', multiUnits: 1 },
-          { id: 3, name: 'Combo 3 Libras', store: '', price: 4.65, quantity: 3, unit: 'lb', multiUnits: 1 }
+          { id: 1, name: 'Pollo Libra Suelta', store: '', price: 1.65, quantity: 1, unit: 'lb', isPack: false, packUnits: 1 },
+          { id: 2, name: 'Bandeja Especial 1.2 kg', store: '', price: 4.10, quantity: 1.2, unit: 'kg', isPack: false, packUnits: 1 },
+          { id: 3, name: 'Combo 3 Libras', store: '', price: 4.65, quantity: 3, unit: 'lb', isPack: false, packUnits: 1 }
         ];
       }
 
@@ -3018,6 +3221,8 @@
         p.quantity = '';
         p.store = '';
         p.photo = null;
+        p.isPack = false;
+        p.packUnits = 1;
       });
       renderProducts();
       calculateWinner(false);
@@ -3033,28 +3238,37 @@
       }
 
       validProds.sort((a, b) => {
-        let aPrice = a.unit === 'un' ? (a.price / a.quantity) : (a.price / (a.quantity * (CONVERSIONS_TO_LB[a.unit] || 1)));
-        let bPrice = b.unit === 'un' ? (b.price / b.quantity) : (b.price / (b.quantity * (CONVERSIONS_TO_LB[b.unit] || 1)));
+        let aPack = (a.isPack && a.packUnits > 1) ? a.packUnits : 1;
+        let bPack = (b.isPack && b.packUnits > 1) ? b.packUnits : 1;
+        let aQty = a.quantity * aPack;
+        let bQty = b.quantity * bPack;
+        let aPrice = a.unit === 'un' ? (a.price / aQty) : (a.price / (aQty * (CONVERSIONS_TO_LB[a.unit] || 1)));
+        let bPrice = b.unit === 'un' ? (b.price / bQty) : (b.price / (bQty * (CONVERSIONS_TO_LB[b.unit] || 1)));
         return aPrice - bPrice;
       });
 
       const winner = validProds[0];
+      const winnerPack = (winner.isPack && winner.packUnits > 1) ? winner.packUnits : 1;
+      const winnerQty = winner.quantity * winnerPack;
       const winnerUnitLabel = winner.unit === 'un' ? 'unidad' : appState.baseUnit;
       const winnerUnitVal = winner.unit === 'un'
-        ? (winner.price / winner.quantity).toFixed(3)
-        : (winner.price / (winner.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[winner.unit] : CONVERSIONS_TO_KG[winner.unit]))).toFixed(3);
+        ? (winner.price / winnerQty).toFixed(3)
+        : (winner.price / (winnerQty * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[winner.unit] : CONVERSIONS_TO_KG[winner.unit]))).toFixed(3);
 
       let text = `🛒 *Comparador de Precios de Mercado*\n\n`;
-      text += `🏆 *La mejor opción es:* ${winner.name}\n`;
+      text += `🏆 *La mejor opción es:* ${winner.name}${winnerPack > 1 ? ` (Pack x${winnerPack})` : ''}\n`;
       text += `💰 *Precio unitario:* ${appState.currency}${winnerUnitVal} por ${winnerUnitLabel}\n\n`;
       text += `📋 *Detalle de opciones comparadas:*\n`;
       
       validProds.forEach((p, idx) => {
+        let pPack = (p.isPack && p.packUnits > 1) ? p.packUnits : 1;
+        let pQty = p.quantity * pPack;
         let pUnitLabel = p.unit === 'un' ? 'unidad' : appState.baseUnit;
         let unitP = p.unit === 'un'
-          ? (p.price / p.quantity).toFixed(3)
-          : (p.price / (p.quantity * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[p.unit] : CONVERSIONS_TO_KG[p.unit]))).toFixed(3);
-        text += `${idx === 0 ? '🥇' : '▫️'} ${p.name}${p.store ? ` (${p.store})` : ''}: ${appState.currency}${p.price} (${p.quantity} ${p.unit}) -> *${appState.currency}${unitP}/${pUnitLabel}*\n`;
+          ? (p.price / pQty).toFixed(3)
+          : (p.price / (pQty * (appState.baseUnit === 'lb' ? CONVERSIONS_TO_LB[p.unit] : CONVERSIONS_TO_KG[p.unit]))).toFixed(3);
+        let packNote = pPack > 1 ? ` (Pack x${pPack} • ${appState.currency}${(p.price / pPack).toFixed(2)} c/u)` : '';
+        text += `${idx === 0 ? '🥇' : '▫️'} ${p.name}${p.store ? ` (${p.store})` : ''}${packNote}: ${appState.currency}${p.price} (${pQty} ${p.unit}) -> *${appState.currency}${unitP}/${pUnitLabel}*\n`;
       });
 
       text += `\n✨ Calculado con la Calculadora de Ofertas Reales`;
